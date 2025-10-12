@@ -36,39 +36,38 @@
 
 ## 🏛️ Hangi Bölümler Takip Ediliyor?
 
-Bilsin, Fırat Üniversitesi'nin **24 farklı bölümünü** otomatik olarak takip eder:
+Bilsin, Fırat Üniversitesi'nin **24 mühendislik bölümünü** otomatik olarak takip eder:
 
 ### 🎓 **Mühendislik Fakültesi**
+- Mühendislik Fakültesi (Genel)
 - Bilgisayar Mühendisliği
-- Elektrik-Elektronik Mühendisliği
-- Yazılım Mühendisliği
-- Yapay Zeka ve Veri Mühendisliği
-- Makine Mühendisliği
+- Biyomühendislik
+- Çevre Mühendisliği
+- Elektrik-Elektronik Mühendisliği (Mühendislik Fakültesi)
 - İnşaat Mühendisliği
-- Endüstri Mühendisliği
+- Jeoloji Mühendisliği
 - Kimya Mühendisliği
+- Makine Mühendisliği
+- Mekatronik Mühendisliği
+- Metalurji ve Malzeme Mühendisliği
+- Otomotiv Mühendisliği
+- Yapay Zeka ve Veri Mühendisliği
+- Yazılım Mühendisliği
 
-### 🏥 **Sağlık Bilimleri**
-- Tıp Fakültesi
-- Diş Hekimliği Fakültesi
-- Eczacılık Fakültesi
-- Sağlık Bilimleri Fakültesi
+### 🔧 **Teknoloji Fakültesi**
+- Teknoloji Fakültesi (Genel)
+- Adli Bilişim Mühendisliği
+- Elektrik-Elektronik Mühendisliği (Teknoloji Fakültesi)
+- Enerji Sistemleri Mühendisliği
+- İnşaat Mühendisliği (Teknoloji Fakültesi)
+- Makine Mühendisliği (Teknoloji Fakültesi)
+- Mekatronik Mühendisliği (Teknoloji Fakültesi)
+- Metalurji ve Malzeme Mühendisliği (Teknoloji Fakültesi)
+- Yazılım Mühendisliği (Teknoloji Fakültesi)
+- Yazılım Mühendisliği Uluslararası Ortak Lisans Programı
 
-### 📚 **Diğer Fakülteler**
-- Eğitim Fakültesi
-- İktisadi ve İdari Bilimler Fakültesi
-- Veteriner Hekimliği Fakültesi
-- Ziraat Fakültesi
-- Su Ürünleri Fakültesi
-- İlahiyat Fakültesi
-- Güzel Sanatlar Fakültesi
-- İletişim Fakültesi
-
-### 🎯 **Enstitüler ve Yüksekokullar**
-- Fen Bilimleri Enstitüsü
-- Sosyal Bilimler Enstitüsü
-- Sağlık Bilimleri Enstitüsü
-- Meslek Yüksekokulları
+### 📝 **MVP Hakkında**
+Bu uygulama **MVP (Minimum Viable Product)** olarak geliştirilmiştir. İlk versiyonda mühendislik bölümleri ile başlanmıştır. Geliştirme devam ettikçe diğer fakülteler (Tıp, Eğitim, İktisadi İdari Bilimler, vb.) yavaş yavaş eklenecektir.
 
 ---
 
@@ -87,10 +86,10 @@ Bilsin, Fırat Üniversitesi'nin **24 farklı bölümünü** otomatik olarak tak
 - ✅ **Veri paylaşımı yok** - Bilgileriniz 3. şahıslarla paylaşılmaz
 - ✅ **Veri silme** - İstediğiniz zaman tüm verilerinizi silebilirsiniz
 
-### 🏛️ **Resmi Onay**
-- Fırat Üniversitesi Dijital Dönüşüm ve Yazılım Ofisi tarafından geliştirildi
-- Üniversite yönetimi tarafından onaylandı
-- Eğitim amaçlı kullanım için lisanslanmış
+### 🏛️ **Geliştirici Bilgisi**
+- Fırat Üniversitesi öğrencisi tarafından geliştirildi
+- Eğitim amaçlı proje olarak geliştirilmiştir
+- Resmi üniversite onayı alınmamıştır
 
 ---
 
@@ -111,7 +110,6 @@ Bilsin, Fırat Üniversitesi'nin **24 farklı bölümünü** otomatik olarak tak
 ### 🎨 **Kullanıcı Deneyimi**
 - **Modern Tasarım**: Material Design 3 ile güncel arayüz
 - **Hızlı Yükleme**: Skeleton loading ile profesyonel deneyim
-- **Offline Okuma**: İndirilen duyuruları internet olmadan okuyun
 - **Paylaşım**: Duyuruları sosyal medyada paylaşın
 - **URL Açma**: Orijinal duyuru sayfasını tarayıcıda açın
 
@@ -151,9 +149,9 @@ Bilsin, Fırat Üniversitesi'nin **24 farklı bölümünü** otomatik olarak tak
 
 ## 🏆 Neden Güvenilir?
 
-### ✅ **Resmi Geliştirici**
-- **Fırat Üniversitesi Dijital Dönüşüm ve Yazılım Ofisi** tarafından geliştirildi
-- Üniversite yönetimi tarafından onaylandı
+### ✅ **Geliştirici Bilgisi**
+- **Fatih Altuntaş** (Fırat Üniversitesi öğrencisi) tarafından geliştirildi
+- Eğitim amaçlı proje olarak geliştirilmiştir
 - Açık kaynak kodlu ve şeffaf geliştirme
 
 ### 🔒 **Güvenli Altyapı**
@@ -162,10 +160,9 @@ Bilsin, Fırat Üniversitesi'nin **24 farklı bölümünü** otomatik olarak tak
 - **GDPR** uyumlu veri işleme
 - **Anonymous Authentication** ile gizlilik
 
-### 📊 **Kanıtlanmış Performans**
-- **99.9%** uptime garantisi
+### 📊 **Sistem Özellikleri**
 - **15 dakika** aralıklarla güncel veri
-- **24/7** otomatik sistem kontrolü
+- **Otomatik sistem kontrolü**
 - **Real-time** bildirim sistemi
 
 ### 🛡️ **Güvenlik Sertifikaları**
@@ -179,8 +176,7 @@ Bilsin, Fırat Üniversitesi'nin **24 farklı bölümünü** otomatik olarak tak
 ## 📞 Destek ve İletişim
 
 ### 🆘 **Teknik Destek**
-- **Email**: dijital@firat.edu.tr
-- **Website**: https://dijital.firat.edu.tr
+- **Email**: altuntasfatih0@outlook.com
 - **GitHub Issues**: [Sorun bildirimi](https://github.com/Conquerorr0/bilsin/issues)
 
 ### 📱 **Uygulama Hakkında**
@@ -188,7 +184,7 @@ Bilsin, Fırat Üniversitesi'nin **24 farklı bölümünü** otomatik olarak tak
 - **Platform**: iOS 12.0+, Android 5.0+
 - **Boyut**: ~15 MB
 - **Dil**: Türkçe
-- **Güncelleme**: Otomatik
+- **Dağıtım**: GitHub Releases
 
 ### 🔄 **Güncellemeler**
 - **Düzenli güncellemeler** ile yeni özellikler
@@ -221,9 +217,9 @@ Bu uygulama MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](L
 - [ ] **Widget Desteği**: Ana ekrana widget ekleme
 - [ ] **Dark Mode**: Karanlık tema desteği
 - [ ] **Çoklu Dil**: İngilizce dil desteği
-- [ ] **Offline Senkronizasyon**: Gelişmiş offline özellikler
 
-### 🔮 **Uzun Vadeli**
+### 🔮 **Uzun Vadeli (İlgi Görürse)**
+Bu özellikler uygulamanın kullanıcı kitlesi ve ilgi seviyesine göre geliştirilebilir:
 - [ ] **Kullanıcı Yorumları**: Duyuru yorumları sistemi
 - [ ] **Duyuru Kategorileri**: Kategori bazında filtreleme
 - [ ] **Favori Duyurular**: Önemli duyuruları kaydetme
@@ -231,27 +227,12 @@ Bu uygulama MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](L
 
 ---
 
-## 📊 İstatistikler
-
-### 📈 **Kullanım İstatistikleri**
-- **24 Bölüm** otomatik takip
-- **15 Dakika** aralıklarla güncelleme
-- **99.9%** sistem uptime
-- **0 Kişisel Veri** toplama
-
-### 🎯 **Hedefler**
-- **1000+ Aktif Kullanıcı** (2024 sonu)
-- **5 Dakika** ortalama yanıt süresi
-- **%95 Kullanıcı Memnuniyeti**
-- **0 Güvenlik İhlali**
-
 ---
 
-**🎓 Fırat Üniversitesi Dijital Dönüşüm ve Yazılım Ofisi**  
-*"Teknoloji ile eğitimi buluşturuyoruz"*
+**👨‍💻 Geliştirici: Fatih Altuntaş**  
+*Fırat Üniversitesi Öğrencisi*
 
-📧 **Email**: dijital@firat.edu.tr  
-🌐 **Website**: https://dijital.firat.edu.tr  
+📧 **Email**: altuntasfatih0@outlook.com  
 📱 **GitHub**: https://github.com/Conquerorr0/bilsin
 
 ---
