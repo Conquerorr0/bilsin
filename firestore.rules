@@ -1,0 +1,142 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Duyurular koleksiyonu herkes tarafından okunabilir
+    match /duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin'; // Sadece admin yazabilir
+    }
+
+    // Bölüm duyuruları koleksiyonları herkes tarafından okunabilir
+    match /bolum_adli-bilisim-muhendisligi_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_bilgisayar-muhendisligi_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_biyomuhendislik_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_cevre-muhendisligi_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_elektrik-elektronik-muhendisligi-mf_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_elektrik-elektronik-muhendisligi-tf_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_enerji-sistemleri-muhendisligi_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_insaat-muhendisligi-mf_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_insaat-muhendisligi-tf_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_jeoloji-muhendisligi_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_kimya-muhendisligi_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_makine-muhendisligi-mf_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_makine-muhendisligi-tf_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_mekatronik-muhendisligi-mf_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_mekatronik-muhendisligi-tf_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_metalurji-malzeme-muhendisligi-mf_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_metalurji-malzeme-muhendisligi-tf_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_muhendislik-fakultesi_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_otomotiv-muhendisligi_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_teknoloji-fakultesi_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_yapay-zeka-veri-muhendisligi_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_yazilim-muhendisligi-mf_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_yazilim-muhendisligi-tf_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+    
+    match /bolum_yazilim-muhendisligi-uluslararasi_duyurular/{duyuruId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin';
+    }
+
+    // Kullanıcılar koleksiyonu: Her kullanıcı kendi verisini okuyabilir/yazabilir
+    match /kullanicilar/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Bölümler koleksiyonu herkes tarafından okunabilir
+    match /bolumler/{bolumId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == 'admin'; // Sadece admin yazabilir
+    }
+  }
+}

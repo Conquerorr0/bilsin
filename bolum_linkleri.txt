@@ -1,0 +1,24 @@
+Mühendislik Fakültesi | https://muhendislikf.firat.edu.tr/announcements-all
+Bilgisayar Mühendisliği | https://bilgisayarmf.firat.edu.tr/announcements-all
+Biyomühendislik | https://bmmf.firat.edu.tr/announcements-all
+Çevre Mühendisliği | https://cevremf.firat.edu.tr/announcements-all
+Elektrik Elektronik Mühendisliği (Mühendislik Fakültesi) | https://eemmf.firat.edu.tr/announcements-all
+İnşaat Mühendisliği | https://insaatmf.firat.edu.tr/announcements-all
+Jeoloji Mühendisliği | https://jeolojimf.firat.edu.tr/announcements-all
+Kimya Mühendisliği | https://kimyamf.firat.edu.tr/announcements-all
+Makine Mühendisliği | https://makinamf.firat.edu.tr/announcements-all
+Mekatronik Mühendisliği | https://mekatronikmf.firat.edu.tr/announcements-all
+Metalurji ve Malzeme Mühendisliği | https://mmmf.firat.edu.tr/announcements-all
+Yapay Zeka ve Veri Mühendisliği | https://yzvm.firat.edu.tr/announcements-all
+Yazılım Mühendisliği | https://yazmf.firat.edu.tr/announcements-all
+Teknoloji Fakültesi | https://teknolojif.firat.edu.tr/announcements-all
+Adli Bilişim Mühendisliği | https://abmtf.firat.edu.tr/tr/announcements-all
+Elektrik Elektronik Mühendisliği (Teknoloji Mühendislik) | https://eemtf.firat.edu.tr/announcements-all
+Enerji Sistemleri Mühendisliği | https://entf.firat.edu.tr/announcements-all
+İnşaat Mühendisliği (Teknoloji Fakültesi) | https://insaattf.firat.edu.tr/tr/announcements-all
+Makine Mühendisliği (Teknoloji Fakültesi) | https://makinatf.firat.edu.tr/announcements-all
+Mekatronik Mühendisliği (Teknoloji Fakültesi) | https://mekatroniktf.firat.edu.tr/tr/announcements-all
+Metalurji ve Malzeme Mühendisliği (Teknoloji Fakültesi) | https://mmtf.firat.edu.tr/tr/announcements-all
+Otomotiv Mühendisliği Bölümü | https://otomotivmf.firat.edu.tr/tr/announcements-all
+Yazılım Mühendisliği (Teknoloji Fakültesi) | https://yazilimtf.firat.edu.tr/tr/announcements-all
+Yazılım Mühendisliği Uluslararası Ortak Lisans Programı | https://yazilimmuholp.firat.edu.tr/announcements-all
