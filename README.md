@@ -2,6 +2,12 @@
 
 > **"Hiçbir duyuruyu kaçırma!"** - Fırat Üniversitesi öğrenci ve personeli için özel olarak tasarlanmış, güvenilir ve kullanıcı dostu duyuru takip uygulaması.
 
+<div align="center">
+  <img src="https://via.placeholder.com/300x600/722D2C/FFFFFF?text=Bilsin+App" alt="Bilsin App Screenshot" width="200"/>
+  <img src="https://via.placeholder.com/300x600/FFFFFF/722D2C?text=Announcements" alt="Announcements Screen" width="200"/>
+  <img src="https://via.placeholder.com/300x600/722D2C/FFFFFF?text=Departments" alt="Departments Screen" width="200"/>
+</div>
+
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/Conquerorr0/bilsin/releases/tag/v1.0.0)
 [![Flutter](https://img.shields.io/badge/Flutter-3.8.1+-blue.svg)](https://flutter.dev/)
 [![Firebase](https://img.shields.io/badge/Firebase-✓-orange.svg)](https://firebase.google.com/)
@@ -123,24 +129,40 @@ Bu uygulama **MVP (Minimum Viable Product)** olarak geliştirilmiştir. İlk ver
 
 ## 🚀 Nasıl Kullanılır?
 
-### 📲 **1. Uygulamayı İndirin**
-- Google Play Store'dan (Android)
-- App Store'dan (iOS)
-- Direkt APK indirme (GitHub Releases)
+## 📥 İndirme ve Kurulum
 
-### ⚙️ **2. İlk Kurulum**
-1. Uygulamayı açın
-2. Bildirim izinlerini verin
-3. İlgilendiğiniz bölümleri seçin
-4. Bildirim tercihlerinizi ayarlayın
+### 🚀 Hızlı İndirme
+[![Download APK](https://img.shields.io/badge/Download-APK-green.svg?style=for-the-badge&logo=android)](https://github.com/Conquerorr0/bilsin/releases/latest/download/app-release.apk)
 
-### 📱 **3. Günlük Kullanım**
+### 📲 **1. APK İndirme**
+- **GitHub Releases**: En güncel APK dosyası
+- **Direkt İndirme**: Yukarıdaki butona tıklayın
+- **Boyut**: ~50 MB
+
+### ⚠️ **Sistem Gereksinimleri**
+- **Android**: 5.0 (API 21) ve üzeri
+- **İnternet**: Bildirimler ve duyuru güncellemeleri için gerekli
+- **Depolama**: ~50 MB boş alan
+- **İzinler**: Bildirim, İnternet erişimi
+
+### ⚙️ **2. Android Kurulum Adımları**
+1. **Bilinmeyen kaynaklardan yükleme** - Android Ayarlar → Güvenlik → Bilinmeyen kaynaklardan yükleme
+2. **APK'yı yükleyin** - İndirilen dosyaya tıklayın
+3. **İzinleri verin** - Gerekli izinleri onaylayın
+4. **Uygulamayı açın** - Otomatik olarak Firebase'e bağlanır
+
+### 📱 **3. İlk Kurulum**
+1. **Bildirim izinlerini verin** - Push bildirimleri için gerekli
+2. **İlgilendiğiniz bölümleri seçin** - 24 mühendislik bölümünden seçim yapın
+3. **Bildirim tercihlerinizi ayarlayın** - Tüm duyurular veya sadece yeni duyurular
+
+### 📱 **4. Günlük Kullanım**
 1. **Ana Sayfa**: Seçtiğiniz bölümlerden gelen duyurular
 2. **Arama**: Duyuru arama ve filtreleme
 3. **Bölümler**: Bölüm seçimi ve ayarları
 4. **Ayarlar**: Bildirim tercihleri ve uygulama ayarları
 
-### 🔔 **4. Bildirim Yönetimi**
+### 🔔 **5. Bildirim Yönetimi**
 - **Ayarlar → Bildirimler**: Bildirim tercihlerini değiştirin
 - **Ayarlar → Bölümler**: Hangi bölümlerden bildirim alacağınızı seçin
 - **Test Bildirimi**: Bildirim sistemini test edin
