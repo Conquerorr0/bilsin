@@ -50,6 +50,13 @@ firebase-debug.*.log
 firebase.json.backup
 .firebaserc.backup
 
+# Firebase yapılandırma dosyaları (gizli bilgiler içerir)
+android/app/google-services.json
+android/app/*firebase-adminsdk*.json
+ios/Runner/GoogleService-Info.plist
+web/firebase-config.js
+lib/firebase_options.dart
+
 # Python
 __pycache__/
 *.py[cod]

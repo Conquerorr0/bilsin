@@ -2,6 +2,11 @@
 
 Fırat Üniversitesi'nin tüm bölümlerinden duyuruları takip eden, anlık push bildirimleri gönderen Flutter mobil uygulaması.
 
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/Conquerorr0/bilsin/releases/tag/v1.0.0)
+[![Flutter](https://img.shields.io/badge/Flutter-3.8.1+-blue.svg)](https://flutter.dev/)
+[![Firebase](https://img.shields.io/badge/Firebase-✓-orange.svg)](https://firebase.google.com/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 ## 🚀 Özellikler
 
 - **24 Bölüm Takibi**: Fırat Üniversitesi'nin tüm bölümlerinden duyuru takibi
@@ -73,9 +78,10 @@ flutter pub get
 # Firebase yapılandırma dosyalarını ekle
 # android/app/google-services.json
 # ios/Runner/GoogleService-Info.plist
+# lib/firebase_options.dart
 
-# Firebase options dosyasını güncelle
-# lib/firebase_options.dart içindeki değerleri Firebase Console'dan alın
+# Bu dosyaları Firebase Console'dan indirin ve projeye ekleyin
+# ⚠️ Bu dosyalar gizli bilgiler içerir ve GitHub'a gönderilmemelidir!
 ```
 
 ### 4. Cloud Functions Kurulumu
@@ -225,11 +231,17 @@ curl -X POST https://europe-west1-YOUR_PROJECT_ID.cloudfunctions.net/sendTestNot
 
 ## 🤝 Katkıda Bulunma
 
-1. Fork edin
-2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
-3. Commit edin (`git commit -m 'Add amazing feature'`)
-4. Push edin (`git push origin feature/amazing-feature`)
+1. Repository'yi fork edin
+2. Develop branch'inden feature branch oluşturun (`git checkout -b feature/amazing-feature`)
+3. Değişikliklerinizi commit edin (`git commit -m 'feat: Add amazing feature'`)
+4. Feature branch'inizi push edin (`git push origin feature/amazing-feature`)
 5. Pull Request oluşturun
+
+### Geliştirme Workflow
+- **Master**: Ana branch (stable releases)
+- **Develop**: Geliştirme branch'i
+- **Feature branches**: `develop`'den oluşturulur
+- **Commit format**: `feat:`, `fix:`, `docs:`, `style:`, `refactor:`, `test:`, `chore:`
 
 ## 📄 Lisans
 
@@ -246,9 +258,13 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosy
 
 Herhangi bir sorun yaşarsanız:
 
-1. [Issues](https://github.com/firat-university/duyuru-takip/issues) sayfasında arama yapın
+1. [Issues](https://github.com/Conquerorr0/bilsin/issues) sayfasında arama yapın
 2. Yeni issue oluşturun
 3. Detaylı hata açıklaması ekleyin
+
+### Firebase Yapılandırma Sorunları
+- Firebase yapılandırma dosyaları eksikse: [Firebase Setup Guide](https://firebase.google.com/docs/flutter/setup)
+- Cloud Functions deploy sorunları: [Firebase Functions Guide](https://firebase.google.com/docs/functions)
 
 ## 📈 Gelecek Özellikler
 
