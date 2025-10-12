@@ -32,6 +32,9 @@ migrate_working_dir/
 .pub/
 /build/
 
+# Screenshots (include these in git)
+!assets/screenshots/
+
 # Symbolication related
 app.*.symbols
 

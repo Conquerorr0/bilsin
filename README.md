@@ -3,10 +3,13 @@
 > **"Hiçbir duyuruyu kaçırma!"** - Fırat Üniversitesi öğrenci ve personeli için özel olarak tasarlanmış, güvenilir ve kullanıcı dostu duyuru takip uygulaması.
 
 <div align="center">
-  <img src="https://via.placeholder.com/300x600/722D2C/FFFFFF?text=Bilsin+App" alt="Bilsin App Screenshot" width="200"/>
-  <img src="https://via.placeholder.com/300x600/FFFFFF/722D2C?text=Announcements" alt="Announcements Screen" width="200"/>
-  <img src="https://via.placeholder.com/300x600/722D2C/FFFFFF?text=Departments" alt="Departments Screen" width="200"/>
+  <!-- Gerçek ekran görüntüleri buraya eklenecek -->
+  <img src="assets/screenshots/home_screen.jpg" alt="Ana Sayfa - Bilsin App" width="200"/>
+  <img src="assets/screenshots/announcements_screen.jpg" alt="Duyurular Ekranı" width="200"/>
+  <img src="assets/screenshots/departments_screen.jpg" alt="Bölümler Ekranı" width="200"/>
 </div>
+
+> **📱 Ekran Görüntüleri**: Gerçek uygulama ekran görüntüleri yakında eklenecek!
 
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/Conquerorr0/bilsin/releases/tag/v1.0.0)
 [![Flutter](https://img.shields.io/badge/Flutter-3.8.1+-blue.svg)](https://flutter.dev/)
