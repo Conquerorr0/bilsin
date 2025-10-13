@@ -123,38 +123,4 @@ function parseTurkishDate(dateText: string): string {
   }
 }
 
-/**
- * Sayfalama ile tüm duyuruları çeker
- * @param {string} url URL to scrape
- * @return {Promise<ScrapedAnnouncement[]>} Array of all announcements
- */
-export async function scrapeAllAnnouncements(url: string):
-  Promise<ScrapedAnnouncement[]> {
-  const allAnnouncements: ScrapedAnnouncement[] = [];
-  let page = 1;
-  let hasMorePages = true;
-
-  while (hasMorePages && page <= 10) { // Maksimum 10 sayfa
-    try {
-      const pageUrl = page === 1 ? url : `${url}?page=${page}`;
-      const pageAnnouncements = await scrapeDepartmentAnnouncements(pageUrl);
-
-      if (pageAnnouncements.length === 0) {
-        hasMorePages = false;
-      } else {
-        allAnnouncements.push(...pageAnnouncements);
-        page++;
-
-        // Sayfa arası bekleme (rate limiting)
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      }
-    } catch (error) {
-      console.error(`Error scraping page ${page} of ${url}:`, error);
-      hasMorePages = false;
-    }
-  }
-
-  console.log(`Total announcements scraped from ${url}: ` +
-    `${allAnnouncements.length}`);
-  return allAnnouncements;
-}
+// scrapeAllAnnouncements fonksiyonu kaldırıldı - sadece ilk sayfa kullanılacak

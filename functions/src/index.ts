@@ -2,7 +2,7 @@ import {onSchedule} from "firebase-functions/v2/scheduler";
 import {onRequest} from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
 import {departments} from "./departmentLinks.js";
-import {scrapeAllAnnouncements} from "./scraper.js";
+import {scrapeDepartmentAnnouncements} from "./scraper.js";
 import {
   saveAnnouncementsToFirestore,
   saveDepartmentToFirestore,
@@ -32,17 +32,20 @@ export const scheduledScraper = onSchedule("every 15 minutes", async (event) => 
         // Bölüm bilgilerini Firestore'a kaydet (güncelle)
         await saveDepartmentToFirestore(department);
 
-        // Duyuruları kazı
-        const scrapedAnnouncements = await scrapeAllAnnouncements(
+        // SADECE SON DUYURUYU KONTROL ET
+        const firstPage = await scrapeDepartmentAnnouncements(
             department.url,
         );
+        const latest = firstPage[0];
 
-        // Yeni duyuruları Firestore'a kaydet
-        const newAnnouncements = await saveAnnouncementsToFirestore(
-            department.id,
-            department.name,
-            scrapedAnnouncements,
-        );
+        let newAnnouncements: any[] = [];
+        if (latest) {
+          newAnnouncements = await saveAnnouncementsToFirestore(
+              department.id,
+              department.name,
+              [latest],
+          );
+        }
 
         // Yeni duyuru varsa bildirim gönder
         if (newAnnouncements.length > 0) {
@@ -87,221 +90,10 @@ export const scheduledScraper = onSchedule("every 15 minutes", async (event) => 
 });
 
 /**
- * Manuel duyuru kazıma fonksiyonu (test için)
- */
-export const manualScraper = onRequest(async (req, res) => {
-  // CORS ayarları
-  res.set("Access-Control-Allow-Origin", "*");
-  res.set("Access-Control-Allow-Methods", "GET, POST");
-  res.set("Access-Control-Allow-Headers", "Content-Type");
-
-  if (req.method === "OPTIONS") {
-    res.status(204).send("");
-    return;
-  }
-
-  try {
-    const {departmentId} = req.body;
-
-    if (!departmentId) {
-      res.status(400).json({error: "departmentId is required"});
-      return;
-    }
-
-    const department = departments.find((d) => d.id === departmentId);
-    if (!department) {
-      res.status(404).json({error: "Department not found"});
-      return;
-    }
-
-    console.log(`Manual scraping for department: ${department.name}`);
-
-    // Duyuruları kazı
-    const scrapedAnnouncements = await scrapeAllAnnouncements(
-        department.url,
-    );
-
-    // Yeni duyuruları kaydet
-    const newAnnouncements = await saveAnnouncementsToFirestore(
-        department.id,
-        department.name,
-        scrapedAnnouncements,
-    );
-
-    res.json({
-      success: true,
-      department: department.name,
-      totalScraped: scrapedAnnouncements.length,
-      newAnnouncements: newAnnouncements.length,
-      announcements: newAnnouncements,
-    });
-  } catch (error) {
-    console.error("Manual scraper error:", error);
-    res.status(500).json({error: (error as Error).message});
-  }
-});
-
-/**
- * Tüm bölümleri manuel olarak kazı (test için)
- */
-export const scrapeAllDepartments = onRequest(async (req, res) => {
-  // CORS ayarları
-  res.set("Access-Control-Allow-Origin", "*");
-  res.set("Access-Control-Allow-Methods", "GET, POST");
-  res.set("Access-Control-Allow-Headers", "Content-Type");
-
-  if (req.method === "OPTIONS") {
-    res.status(204).send("");
-    return;
-  }
-
-  try {
-    console.log("Manual scrape all departments started");
-
-    let totalNewAnnouncements = 0;
-    const results: any[] = [];
-
-    for (const department of departments) {
-      try {
-        const scrapedAnnouncements = await scrapeAllAnnouncements(
-            department.url,
-        );
-        
-        // İlk 10 duyuruyu al
-        const firstTen = scrapedAnnouncements.slice(0, 10);
-        
-        const newAnnouncements = await saveAnnouncementsToFirestore(
-            department.id,
-            department.name,
-            firstTen,
-        );
-
-        results.push({
-          department: department.name,
-          scraped: scrapedAnnouncements.length,
-          new: newAnnouncements.length,
-        });
-
-        totalNewAnnouncements += newAnnouncements.length;
-
-        // Bölümler arası bekleme
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      } catch (error) {
-        console.error(`Error scraping ${department.name}:`, error);
-        results.push({
-          department: department.name,
-          error: (error as Error).message,
-        });
-      }
-    }
-
-    res.json({
-      success: true,
-      totalNewAnnouncements,
-      results,
-    });
-  } catch (error) {
-    console.error("Scrape all departments error:", error);
-    res.status(500).json({error: (error as Error).message});
-  }
-});
-
-/**
- * Eksik bölümleri Firestore'a ekle
- */
-export const addMissingDepartments = onRequest(async (req, res) => {
-  // CORS ayarları
-  res.set("Access-Control-Allow-Origin", "*");
-  res.set("Access-Control-Allow-Methods", "GET, POST");
-  res.set("Access-Control-Allow-Headers", "Content-Type");
-
-  if (req.method === "OPTIONS") {
-    res.status(204).send("");
-    return;
-  }
-
-  try {
-    console.log("Adding missing departments to Firestore");
-
-    const missingDepartments = [
-      {
-        id: "insaat-muhendisligi-tf",
-        name: "İnşaat Mühendisliği (Teknoloji Fakültesi)",
-        url: "https://insaattf.firat.edu.tr/tr/announcements-all"
-      },
-      {
-        id: "makine-muhendisligi-tf", 
-        name: "Makine Mühendisliği (Teknoloji Fakültesi)",
-        url: "https://makinatf.firat.edu.tr/announcements-all"
-      },
-      {
-        id: "mekatronik-muhendisligi-tf",
-        name: "Mekatronik Mühendisliği (Teknoloji Fakültesi)", 
-        url: "https://mekatroniktf.firat.edu.tr/tr/announcements-all"
-      },
-      {
-        id: "metalurji-malzeme-muhendisligi-tf",
-        name: "Metalurji ve Malzeme Mühendisliği (Teknoloji Fakültesi)",
-        url: "https://mmtf.firat.edu.tr/tr/announcements-all"
-      },
-      {
-        id: "otomotiv-muhendisligi",
-        name: "Otomotiv Mühendisliği Bölümü",
-        url: "https://otomotivmf.firat.edu.tr/tr/announcements-all"
-      },
-      {
-        id: "yazilim-muhendisligi-tf",
-        name: "Yazılım Mühendisliği (Teknoloji Fakültesi)",
-        url: "https://yazilimtf.firat.edu.tr/tr/announcements-all"
-      },
-      {
-        id: "yazilim-muhendisligi-uluslararasi",
-        name: "Yazılım Mühendisliği Uluslararası Ortak Lisans Programı",
-        url: "https://yazilimmuholp.firat.edu.tr/announcements-all"
-      },
-      {
-        id: "enerji-sistemleri-muhendisligi",
-        name: "Enerji Sistemleri Mühendisliği",
-        url: "https://entf.firat.edu.tr/announcements-all"
-      }
-    ];
-
-    const results = [];
-    
-    for (const dept of missingDepartments) {
-      try {
-        await saveDepartmentToFirestore(dept);
-        results.push({
-          department: dept.name,
-          status: "success"
-        });
-        console.log(`Added department: ${dept.name}`);
-      } catch (error) {
-        results.push({
-          department: dept.name,
-          status: "error",
-          error: (error as Error).message
-        });
-        console.error(`Error adding department ${dept.name}:`, error);
-      }
-    }
-
-    res.json({
-      success: true,
-      message: "Missing departments added",
-      results
-    });
-  } catch (error) {
-    console.error("Add missing departments error:", error);
-    res.status(500).json({error: (error as Error).message});
-  }
-});
-
-/**
- * Test bildirimi gönder
+ * Manuel test bildirimi gönderme fonksiyonu
+ * Sadece test amaçlıdır.
  */
 export const sendTestNotification = onRequest(async (req, res) => {
-  // CORS ayarları
   res.set("Access-Control-Allow-Origin", "*");
   res.set("Access-Control-Allow-Methods", "GET, POST");
   res.set("Access-Control-Allow-Headers", "Content-Type");
@@ -312,19 +104,164 @@ export const sendTestNotification = onRequest(async (req, res) => {
   }
 
   try {
-    const {fcmToken} = req.body;
+    console.log("Test notification function triggered.");
 
-    if (!fcmToken) {
-      res.status(400).json({error: "fcmToken is required"});
+    const departmentId = req.body.departmentId || "bilgisayar-muhendisligi";
+    const departmentName = req.body.departmentName || "Bilgisayar Mühendisliği";
+    const title = req.body.title || "🧪 TEST DUYURUSU - Bildirim Sistemi Testi";
+    const content = req.body.content || "Bu bir test duyurusudur. Bildirim sisteminin çalışıp çalışmadığını kontrol etmek için eklenmiştir.";
+    const url = req.body.url || "https://bilgisayarmf.firat.edu.tr/test-duyuru";
+
+    const testAnnouncement = {
+      id: `${departmentId}_${Date.now()}_test`,
+      baslik: title,
+      icerik: content,
+      tarih: new Date().toISOString(),
+      yayinlanmaTarihi: new Date().toISOString(),
+      bolum_id: departmentId,
+      bolum_adi: departmentName,
+      url: url,
+      olusturma_zamani: new Date(),
+    };
+
+    // İlgili kullanıcıları bul
+    const usersToNotify = await getUsersToNotify(departmentId);
+    const fcmTokens = usersToNotify
+        .map((user) => user.customClaims?.fcm_token)
+        .filter((token) => token) as string[];
+
+    if (fcmTokens.length === 0) {
+      console.log(`No FCM tokens found for department ${departmentId}.`);
+      res.status(200).json({
+        success: false,
+        message: `No users following ${departmentName} or no FCM tokens found.`,
+      });
       return;
     }
 
-    const {sendTestNotification} = await import("./notifications.js");
-    await sendTestNotification(fcmToken);
+    console.log(`Sending test notification to ${fcmTokens.length} users for ${departmentName}`);
+    await sendNotificationToUsers(testAnnouncement, fcmTokens);
 
-    res.json({success: true, message: "Test notification sent"});
+    res.status(200).json({
+      success: true,
+      message: "Test bildirimi başarıyla gönderildi.",
+      department: departmentName,
+      fcmTokensCount: fcmTokens.length,
+      announcement: testAnnouncement,
+    });
   } catch (error) {
-    console.error("Send test notification error:", error);
-    res.status(500).json({error: (error as Error).message});
+    console.error("Error sending test notification:", error);
+    res.status(500).json({
+      success: false,
+      message: "Test bildirimi gönderilirken bir hata oluştu.",
+      error: (error as Error).message,
+    });
+  }
+});
+
+/**
+ * Debug function - Firestore verilerini kontrol eder
+ */
+export const debugFirestore = onRequest(async (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-Methods", "GET, POST");
+  res.set("Access-Control-Allow-Headers", "Content-Type");
+
+  try {
+    console.log("Debug function triggered.");
+
+    // Tüm kullanıcıları listele
+    const usersSnapshot = await admin.firestore()
+        .collection("kullanicilar")
+        .get();
+
+    const users = [];
+    for (const doc of usersSnapshot.docs) {
+      const data = doc.data();
+      users.push({
+        uid: doc.id,
+        fcmToken: data.fcmToken || data.fcm_token || "YOK",
+        takipEdilenBolumler: data.takipEdilenBolumler || data.takip_edilen_bolumler || [],
+        bildirimTercihi: data.bildirimTercihi || data.bildirim_tercihi || "YOK",
+      });
+    }
+
+    // Bilgisayar Mühendisliği takip eden kullanıcıları bul
+    const bilgisayarUsers = users.filter((user) => 
+      user.takipEdilenBolumler.includes("bilgisayar-muhendisligi")
+    );
+
+    res.status(200).json({
+      success: true,
+      totalUsers: users.length,
+      bilgisayarUsers: bilgisayarUsers.length,
+      allUsers: users,
+      bilgisayarFollowers: bilgisayarUsers,
+    });
+  } catch (error) {
+    console.error("Debug error:", error);
+    res.status(500).json({
+      success: false,
+      error: (error as Error).message,
+    });
+  }
+});
+
+/**
+ * Direct FCM test function - Token ile direkt bildirim gönderir
+ */
+export const directFCMTest = onRequest(async (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-Methods", "GET, POST");
+  res.set("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    res.status(204).send("");
+    return;
+  }
+
+  try {
+    console.log("Direct FCM test function triggered.");
+
+    const fcmTokens = req.body.fcmTokens || [];
+    const title = req.body.title || "🧪 DIRECT FCM TEST";
+    const content = req.body.content || "Bu direkt FCM test bildirimidir!";
+
+    if (fcmTokens.length === 0) {
+      res.status(400).json({
+        success: false,
+        message: "FCM token array required",
+      });
+      return;
+    }
+
+    const testAnnouncement = {
+      id: `direct_test_${Date.now()}`,
+      baslik: title,
+      icerik: content,
+      tarih: new Date().toISOString(),
+      yayinlanmaTarihi: new Date().toISOString(),
+      bolum_id: "bilgisayar-muhendisligi",
+      bolum_adi: "Bilgisayar Mühendisliği",
+      url: "https://test.com",
+      olusturma_zamani: new Date(),
+    };
+
+    console.log(`Sending direct FCM test to ${fcmTokens.length} tokens`);
+    await sendNotificationToUsers(testAnnouncement, fcmTokens);
+
+    res.status(200).json({
+      success: true,
+      message: "Direct FCM test bildirimi gönderildi!",
+      tokensCount: fcmTokens.length,
+      announcement: testAnnouncement,
+    });
+  } catch (error) {
+    console.error("Direct FCM test error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Direct FCM test hatası",
+      error: (error as Error).message,
+    });
   }
 });

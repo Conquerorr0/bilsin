@@ -33,24 +33,33 @@ export async function saveAnnouncementsToFirestore(
       .limit(50) // Son 50 duyuruyu kontrol et
       .get();
 
-    // Mevcut duyuru başlıklarını hash set olarak sakla
-    const existingTitles = new Set<string>();
+    // Mevcut duyuru başlıklarını hash set olarak sakla - daha güçlü deduplication
+    const existingKeys = new Set<string>();
     existingAnnouncements.forEach((doc) => {
       const data = doc.data();
-      existingTitles.add(`${data.baslik}-${data.tarih}`);
+      // Başlık + URL kombinasyonu ile daha güçlü kontrol
+      const uniqueKey = `${data.baslik?.trim() || ''}-${data.url || ''}`;
+      existingKeys.add(uniqueKey);
     });
+    
+    console.log(`DEBUG: Existing ${existingKeys.size} announcements in Firestore`);
 
     // Batch write için hazırla
     const batch = getFirestore().batch();
     let batchCount = 0;
 
     for (const scraped of scrapedAnnouncements) {
-      const announcementKey = `${scraped.baslik}-${scraped.tarih}`;
+      // Başlık + URL kombinasyonu ile daha güçlü kontrol
+      const announcementKey = `${scraped.baslik?.trim() || ''}-${scraped.url || ''}`;
+      
+      console.log(`DEBUG: Checking announcement: "${scraped.baslik}" - URL: "${scraped.url}" - Key: "${announcementKey}"`);
 
       // Yeni duyuru mu kontrol et
-      if (!existingTitles.has(announcementKey)) {
-        const announcementId = `${departmentId}_${Date.now()}_` +
-          `${Math.random().toString(36).substr(2, 9)}`;
+      if (!existingKeys.has(announcementKey)) {
+        console.log(`DEBUG: New announcement found: "${scraped.baslik}"`);
+        // Daha güvenli ID generation - başlık hash'i kullan
+        const titleHash = Buffer.from(scraped.baslik || '').toString('base64').substring(0, 8);
+        const announcementId = `${departmentId}_${Date.now()}_${titleHash}`;
 
         const announcement: Announcement = {
           id: announcementId,
