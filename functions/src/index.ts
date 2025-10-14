@@ -53,10 +53,7 @@ export const scheduledScraper = onSchedule("every 15 minutes", async (event) => 
             `for ${department.name}`);
 
           // İlgili kullanıcıları bul
-          const usersToNotify = await getUsersToNotify(department.id);
-          const fcmTokens = usersToNotify
-              .map((user) => user.customClaims?.fcm_token)
-              .filter((token) => token) as string[];
+          const fcmTokens = await getUsersToNotify(department.id);
 
           // Her yeni duyuru için bildirim gönder
           for (const announcement of newAnnouncements) {
@@ -125,10 +122,7 @@ export const sendTestNotification = onRequest(async (req, res) => {
     };
 
     // İlgili kullanıcıları bul
-    const usersToNotify = await getUsersToNotify(departmentId);
-    const fcmTokens = usersToNotify
-        .map((user) => user.customClaims?.fcm_token)
-        .filter((token) => token) as string[];
+    const fcmTokens = await getUsersToNotify(departmentId);
 
     if (fcmTokens.length === 0) {
       console.log(`No FCM tokens found for department ${departmentId}.`);

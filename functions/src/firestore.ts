@@ -151,34 +151,27 @@ export async function saveDepartmentToFirestore(department: Department):
 }
 
 /**
- * Bildirim gönderilecek kullanıcıları getirir
+ * Bildirim gönderilecek kullanıcıların FCM token'larını getirir
  * @param {string} departmentId Department ID
- * @return {Promise<admin.auth.UserRecord[]>} Array of users to notify
+ * @return {Promise<string[]>} Array of FCM tokens
  */
 export async function getUsersToNotify(departmentId: string):
-  Promise<admin.auth.UserRecord[]> {
+  Promise<string[]> {
   try {
     const usersSnapshot = await getFirestore()
       .collection("kullanicilar")
-      .where("takip_edilen_bolumler", "array-contains", departmentId)
-      .where("fcm_token", "!=", null)
+      // Uygulama camelCase yazıyor: takipEdilenBolumler
+      .where("takipEdilenBolumler", "array-contains", departmentId)
       .get();
 
-    const users: admin.auth.UserRecord[] = [];
-
+    const tokens: string[] = [];
     for (const doc of usersSnapshot.docs) {
-      const userData = doc.data();
-      if (userData.fcm_token) {
-        try {
-          const userRecord = await admin.auth().getUser(doc.id);
-          users.push(userRecord);
-        } catch (error) {
-          console.error(`Error getting user ${doc.id}:`, error);
-        }
-      }
+      const data = doc.data();
+      const token = (data.fcm_token || data.fcmToken) as string | undefined;
+      if (token && token.length > 10) tokens.push(token);
     }
 
-    return users;
+    return tokens;
   } catch (error) {
     console.error(`Error getting users to notify for ${departmentId}:`, error);
     throw error;
