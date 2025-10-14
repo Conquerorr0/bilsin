@@ -72,8 +72,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
+# lib/ ve lib64/ Flutter projesinde gerekli, ignore etmeyelim
 parts/
 sdist/
 var/
