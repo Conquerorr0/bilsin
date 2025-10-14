@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
+import '../providers/theme_provider.dart';
 import 'privacy_policy_screen.dart';
 import 'terms_of_service_screen.dart';
 
@@ -51,7 +52,11 @@ class SettingsScreen extends StatelessWidget {
               _buildSection(
                 title: 'Uygulama Bilgileri',
                 icon: Icons.info,
-                children: [_buildAppInfoTile(), _buildVersionTile()],
+                children: [
+                  _buildThemeTile(context),
+                  _buildAppInfoTile(),
+                  _buildVersionTile(),
+                ],
               ),
 
               const SizedBox(height: 24),
@@ -69,6 +74,32 @@ class SettingsScreen extends StatelessWidget {
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildThemeTile(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+    return ListTile(
+      leading: const Icon(Icons.dark_mode),
+      title: const Text('Tema'),
+      subtitle: Text(
+        themeProvider.mode == ThemeMode.system
+            ? 'Sistem'
+            : themeProvider.mode == ThemeMode.dark
+            ? 'Koyu'
+            : 'Açık',
+      ),
+      trailing: DropdownButton<ThemeMode>(
+        value: themeProvider.mode,
+        onChanged: (ThemeMode? val) {
+          if (val != null) themeProvider.setMode(val);
+        },
+        items: const [
+          DropdownMenuItem(value: ThemeMode.system, child: Text('Sistem')),
+          DropdownMenuItem(value: ThemeMode.light, child: Text('Açık')),
+          DropdownMenuItem(value: ThemeMode.dark, child: Text('Koyu')),
+        ],
       ),
     );
   }

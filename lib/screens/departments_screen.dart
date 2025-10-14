@@ -71,6 +71,8 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
   }
 
   Widget _buildSearchBar() {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
@@ -82,16 +84,19 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDark ? theme.colorScheme.surface : Colors.white,
           borderRadius: BorderRadius.circular(12),
         ),
         child: TextField(
           controller: _searchController,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             hintText: 'Bölüm ara...',
-            prefixIcon: Icon(Icons.search, color: Color(0xFF79113E)),
+            prefixIcon: const Icon(Icons.search, color: Color(0xFF79113E)),
             border: InputBorder.none,
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
           ),
         ),
       ),
@@ -185,13 +190,15 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
   Widget _buildBottomButtons() {
     return Consumer<UserProvider>(
       builder: (context, userProvider, child) {
+        final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
         return Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: isDark ? theme.colorScheme.surface : Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: (isDark ? Colors.black : Colors.black).withOpacity(0.1),
                 blurRadius: 8,
                 offset: const Offset(0, -4),
               ),

@@ -11,6 +11,8 @@ class FilterChipWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Consumer2<AnnouncementProvider, UserProvider>(
       builder: (context, announcementProvider, userProvider, child) {
         // Sadece seçili bölümlerin chip'lerini göster
@@ -29,13 +31,21 @@ class FilterChipWidget extends StatelessWidget {
                 onSelected: (selected) {
                   onDepartmentFilterChanged(null);
                 },
-                backgroundColor: Colors.grey[200],
-                selectedColor: const Color(0xFF79113E).withOpacity(0.2),
-                checkmarkColor: const Color(0xFF79113E),
+                backgroundColor: isDark
+                    ? theme.colorScheme.surfaceVariant.withOpacity(0.25)
+                    : Colors.grey[200],
+                selectedColor: isDark
+                    ? theme.colorScheme.primary.withOpacity(0.35)
+                    : const Color(0xFF79113E).withOpacity(0.2),
+                checkmarkColor: isDark
+                    ? theme.colorScheme.onPrimary
+                    : const Color(0xFF79113E),
                 labelStyle: TextStyle(
                   color: announcementProvider.selectedDepartmentFilter == null
-                      ? const Color(0xFF79113E)
-                      : Colors.black87,
+                      ? (isDark
+                            ? theme.colorScheme.primary
+                            : const Color(0xFF79113E))
+                      : (isDark ? theme.colorScheme.onSurface : Colors.black87),
                   fontWeight:
                       announcementProvider.selectedDepartmentFilter == null
                       ? FontWeight.w600
@@ -64,11 +74,23 @@ class FilterChipWidget extends StatelessWidget {
                         selected ? department.id : null,
                       );
                     },
-                    backgroundColor: department.color.withOpacity(0.1),
-                    selectedColor: department.color.withOpacity(0.3),
-                    checkmarkColor: department.color,
+                    backgroundColor: isDark
+                        ? theme.colorScheme.surfaceVariant.withOpacity(0.25)
+                        : department.color.withOpacity(0.1),
+                    selectedColor: isDark
+                        ? department.color.withOpacity(0.45)
+                        : department.color.withOpacity(0.3),
+                    checkmarkColor: isDark
+                        ? theme.colorScheme.onPrimary
+                        : department.color,
                     labelStyle: TextStyle(
-                      color: isSelected ? department.color : Colors.black87,
+                      color: isSelected
+                          ? (isDark
+                                ? theme.colorScheme.onPrimary
+                                : department.color)
+                          : (isDark
+                                ? theme.colorScheme.onSurface
+                                : Colors.black87),
                       fontWeight: isSelected
                           ? FontWeight.w600
                           : FontWeight.normal,
