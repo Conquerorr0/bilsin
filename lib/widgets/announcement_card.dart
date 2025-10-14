@@ -13,13 +13,16 @@ class AnnouncementCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final departmentColor = _getDepartmentColor(announcement.bolumId);
 
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
-      color: Colors.white,
+      color: theme.cardColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.grey.withOpacity(0.2), width: 1),
+        side: BorderSide(color: theme.dividerColor.withOpacity(0.2), width: 1),
       ),
       child: InkWell(
         onTap: onTap,
@@ -36,10 +39,11 @@ class AnnouncementCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       announcement.baslik,
-                      style: const TextStyle(
-                        fontSize: 16,
+                      style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF79113E),
+                        color: isDark
+                            ? theme.colorScheme.onSurface
+                            : const Color(0xFF79113E),
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -52,7 +56,9 @@ class AnnouncementCard extends StatelessWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.1),
+                      color: isDark
+                          ? theme.colorScheme.surfaceVariant.withOpacity(0.35)
+                          : Colors.grey.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -60,7 +66,9 @@ class AnnouncementCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
-                        color: Colors.grey[600],
+                        color: isDark
+                            ? theme.colorScheme.onSurfaceVariant
+                            : Colors.grey[600],
                       ),
                     ),
                   ),
@@ -93,11 +101,7 @@ class AnnouncementCard extends StatelessWidget {
               // İçerik önizlemesi
               Text(
                 announcement.shortContent,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.black87,
-                  height: 1.4,
-                ),
+                style: theme.textTheme.bodyMedium?.copyWith(height: 1.4),
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -107,17 +111,30 @@ class AnnouncementCard extends StatelessWidget {
               // Alt bilgi
               Row(
                 children: [
-                  Icon(Icons.access_time, size: 14, color: Colors.grey[600]),
+                  Icon(
+                    Icons.access_time,
+                    size: 14,
+                    color: isDark
+                        ? theme.colorScheme.onSurfaceVariant
+                        : Colors.grey[600],
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     _formatRelativeTime(announcement.olusturmaZamani),
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: isDark
+                          ? theme.colorScheme.onSurfaceVariant
+                          : Colors.grey[600],
+                    ),
                   ),
                   const Spacer(),
                   Icon(
                     Icons.arrow_forward_ios,
                     size: 14,
-                    color: Colors.grey[400],
+                    color: isDark
+                        ? theme.colorScheme.onSurfaceVariant
+                        : Colors.grey[400],
                   ),
                 ],
               ),
