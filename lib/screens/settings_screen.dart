@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
 import '../providers/theme_provider.dart';
+import '../providers/locale_provider.dart';
+import '../l10n/app_localizations.dart';
 import 'privacy_policy_screen.dart';
 import 'terms_of_service_screen.dart';
 
@@ -10,11 +12,13 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Ayarlar',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          l10n.settings,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color(0xFF79113E),
         foregroundColor: Colors.white,
@@ -54,6 +58,7 @@ class SettingsScreen extends StatelessWidget {
                 icon: Icons.info,
                 children: [
                   _buildThemeTile(context),
+                  _buildLanguageTile(context),
                   _buildAppInfoTile(),
                   _buildVersionTile(),
                 ],
@@ -99,6 +104,33 @@ class SettingsScreen extends StatelessWidget {
           DropdownMenuItem(value: ThemeMode.system, child: Text('Sistem')),
           DropdownMenuItem(value: ThemeMode.light, child: Text('Açık')),
           DropdownMenuItem(value: ThemeMode.dark, child: Text('Koyu')),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLanguageTile(BuildContext context) {
+    final localeProvider = context.watch<LocaleProvider>();
+    final l10n = AppLocalizations.of(context)!;
+    
+    return ListTile(
+      leading: const Icon(Icons.language),
+      title: Text(l10n.language),
+      subtitle: Text(localeProvider.currentLanguageName),
+      trailing: DropdownButton<Locale>(
+        value: localeProvider.locale,
+        onChanged: (Locale? val) {
+          if (val != null) localeProvider.setLocale(val);
+        },
+        items: [
+          DropdownMenuItem(
+            value: const Locale('tr'),
+            child: Text(l10n.turkish),
+          ),
+          DropdownMenuItem(
+            value: const Locale('en'),
+            child: Text(l10n.english),
+          ),
         ],
       ),
     );

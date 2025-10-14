@@ -1,0 +1,122 @@
+{
+  "@@locale": "en",
+  "appTitle": "Fırat Uni Announcement Tracker",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "home": "Home",
+  "departments": "Departments",
+  "settings": "Settings",
+  "all": "All",
+  "search": "Search",
+  "searchHint": "Search announcements...",
+  "selectDepartments": "Select Departments",
+  "selectAll": "Select All",
+  "removeAll": "Remove All",
+  "save": "Save",
+  "departmentsSelected": "{count} departments selected",
+  "@departmentsSelected": {
+    "description": "Number of selected departments",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noAnnouncements": "No announcements yet",
+  "noAnnouncementsMessage": "No announcements found in the departments you follow.",
+  "selectDepartmentsFirst": "Select departments first",
+  "selectDepartmentsMessage": "You need to select at least one department to see announcements.",
+  "announcementDetails": "Announcement Details",
+  "openInWebsite": "Open in Website",
+  "share": "Share",
+  "publishedOn": "Published On",
+  "department": "Department",
+  "content": "Content",
+  "loading": "Loading...",
+  "error": "Error",
+  "retry": "Retry",
+  "refresh": "Refresh",
+  "testNotification": "Test Notification",
+  "testNotificationDescription": "Use to test the notification system",
+  "sendTestNotification": "Send Test Notification",
+  "notificationSent": "Test notification sent",
+  "notificationFailed": "Test notification failed",
+  "darkMode": "Dark Mode",
+  "language": "Language",
+  "turkish": "Türkçe",
+  "english": "English",
+  "about": "About",
+  "version": "Version",
+  "developer": "Developer",
+  "developerInfo": "Fatih Altuntaş - Fırat University Student",
+  "contact": "Contact",
+  "email": "Email",
+  "emailAddress": "altuntasfatih0@outlook.com",
+  "updateAvailable": "Update Available",
+  "updateRequired": "Update Required",
+  "updateOptional": "Update Recommended",
+  "updateNow": "Update Now",
+  "updateLater": "Later",
+  "updateDownload": "Download Update",
+  "noUpdate": "App is up to date",
+  "errorOccurred": "An error occurred",
+  "tryAgain": "Try again",
+  "ago": "{time} ago",
+  "@ago": {
+    "description": "Time ago format",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "daysAgo": "{count} days ago",
+  "@daysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursAgo": "{count} hours ago",
+  "@hoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesAgo": "{count} minutes ago",
+  "@minutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "justNow": "Just now",
+  "today": "Today",
+  "yesterday": "Yesterday",
+  "unknownDepartment": "Unknown Department",
+  "followDepartments": "Follow Departments",
+  "followDepartmentsDescription": "Select the departments you want to follow",
+  "notificationSettings": "Notification Settings",
+  "allNotifications": "All Notifications",
+  "onlyNewAnnouncements": "Only New Announcements",
+  "notificationPreferenceDescription": "Choose your notification preference",
+  "departmentSearch": "Search departments...",
+  "noDepartmentsFound": "No departments found",
+  "selectAtLeastOne": "Select at least one department",
+  "urlCannotBeOpened": "URL cannot be opened",
+  "shareSubject": "Fırat University Announcement",
+  "shareText": "📢 {title}\n\n{content}\n\n🔗 {url}\n\n📅 {date}\n\n#FiratUniversity #Announcement",
+  "@shareText": {
+    "placeholders": {
+      "title": {"type": "String"},
+      "content": {"type": "String"},
+      "url": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  }
+}

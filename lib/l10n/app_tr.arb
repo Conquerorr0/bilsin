@@ -1,0 +1,122 @@
+{
+  "@@locale": "tr",
+  "appTitle": "Fırat Üni Duyuru Takip",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "home": "Ana Sayfa",
+  "departments": "Bölümler",
+  "settings": "Ayarlar",
+  "all": "Tümü",
+  "search": "Ara",
+  "searchHint": "Duyuru ara...",
+  "selectDepartments": "Bölüm Seç",
+  "selectAll": "Tümünü Seç",
+  "removeAll": "Tümünü Kaldır",
+  "save": "Kaydet",
+  "departmentsSelected": "{count} bölüm seçildi",
+  "@departmentsSelected": {
+    "description": "Number of selected departments",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noAnnouncements": "Henüz duyuru yok",
+  "noAnnouncementsMessage": "Takip ettiğiniz bölümlerde henüz duyuru bulunmuyor.",
+  "selectDepartmentsFirst": "Önce bölüm seçin",
+  "selectDepartmentsMessage": "Duyuruları görmek için en az bir bölüm seçmeniz gerekiyor.",
+  "announcementDetails": "Duyuru Detayları",
+  "openInWebsite": "Web Sitesinde Aç",
+  "share": "Paylaş",
+  "publishedOn": "Yayınlanma Tarihi",
+  "department": "Bölüm",
+  "content": "İçerik",
+  "loading": "Yükleniyor...",
+  "error": "Hata",
+  "retry": "Tekrar Dene",
+  "refresh": "Yenile",
+  "testNotification": "Test Bildirimi",
+  "testNotificationDescription": "Bildirim sistemini test etmek için kullanın",
+  "sendTestNotification": "Test Bildirimi Gönder",
+  "notificationSent": "Test bildirimi gönderildi",
+  "notificationFailed": "Test bildirimi gönderilemedi",
+  "darkMode": "Karanlık Mod",
+  "language": "Dil",
+  "turkish": "Türkçe",
+  "english": "English",
+  "about": "Hakkında",
+  "version": "Sürüm",
+  "developer": "Geliştirici",
+  "developerInfo": "Fatih Altuntaş - Fırat Üniversitesi Öğrencisi",
+  "contact": "İletişim",
+  "email": "E-posta",
+  "emailAddress": "altuntasfatih0@outlook.com",
+  "updateAvailable": "Güncelleme Mevcut",
+  "updateRequired": "Güncelleme Gerekli",
+  "updateOptional": "Güncelleme Önerilir",
+  "updateNow": "Şimdi Güncelle",
+  "updateLater": "Daha Sonra",
+  "updateDownload": "Güncellemeyi İndir",
+  "noUpdate": "Uygulama güncel",
+  "errorOccurred": "Bir hata oluştu",
+  "tryAgain": "Tekrar deneyin",
+  "ago": "{time} önce",
+  "@ago": {
+    "description": "Time ago format",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "daysAgo": "{count} gün önce",
+  "@daysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursAgo": "{count} saat önce",
+  "@hoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesAgo": "{count} dakika önce",
+  "@minutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "justNow": "Az önce",
+  "today": "Bugün",
+  "yesterday": "Dün",
+  "unknownDepartment": "Bilinmeyen Bölüm",
+  "followDepartments": "Bölüm Takip Et",
+  "followDepartmentsDescription": "Takip etmek istediğiniz bölümleri seçin",
+  "notificationSettings": "Bildirim Ayarları",
+  "allNotifications": "Tüm Bildirimler",
+  "onlyNewAnnouncements": "Sadece Yeni Duyurular",
+  "notificationPreferenceDescription": "Bildirim tercihinizi seçin",
+  "departmentSearch": "Bölüm ara...",
+  "noDepartmentsFound": "Bölüm bulunamadı",
+  "selectAtLeastOne": "En az bir bölüm seçin",
+  "urlCannotBeOpened": "URL açılamadı",
+  "shareSubject": "Fırat Üniversitesi Duyurusu",
+  "shareText": "📢 {title}\n\n{content}\n\n🔗 {url}\n\n📅 {date}\n\n#FıratÜniversitesi #Duyuru",
+  "@shareText": {
+    "placeholders": {
+      "title": {"type": "String"},
+      "content": {"type": "String"},
+      "url": {"type": "String"},
+      "date": {"type": "String"}
+    }
+  }
+}

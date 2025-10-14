@@ -6,9 +6,11 @@ import 'firebase_options.dart';
 import 'providers/user_provider.dart';
 import 'providers/announcement_provider.dart';
 import 'providers/theme_provider.dart';
+import 'providers/locale_provider.dart';
 import 'services/fcm_service.dart';
 import 'services/update_service.dart';
 import 'screens/home_screen.dart';
+import 'l10n/app_localizations.dart';
 
 // Global navigator key for deep linking
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -35,12 +37,17 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => AnnouncementProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()..load()),
+        ChangeNotifierProvider(create: (_) => LocaleProvider()),
       ],
       child: Builder(
-        builder: (context) => MaterialApp(
-          title: 'Fırat Üni Duyuru Takip',
-          navigatorKey: navigatorKey,
-          debugShowCheckedModeBanner: false,
+        builder: (context) => Consumer2<ThemeProvider, LocaleProvider>(
+          builder: (context, themeProvider, localeProvider, child) => MaterialApp(
+            title: 'Fırat Üni Duyuru Takip',
+            navigatorKey: navigatorKey,
+            debugShowCheckedModeBanner: false,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: localeProvider.locale,
           theme: ThemeData(
             primarySwatch: Colors.red,
             primaryColor: const Color(0xFF79113E),
@@ -88,8 +95,9 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
-          themeMode: context.watch<ThemeProvider>().mode,
+          themeMode: themeProvider.mode,
           home: const SplashScreen(),
+          ),
         ),
       ),
     );
@@ -135,6 +143,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    
     return Scaffold(
       backgroundColor: const Color(0xFF79113E),
       body: Center(
@@ -174,9 +184,9 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: 32),
 
             // Uygulama adı
-            const Text(
-              'Fırat Üni Duyuru Takip',
-              style: TextStyle(
+            Text(
+              l10n?.appTitle ?? 'Fırat Üni Duyuru Takip',
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -186,9 +196,9 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: 8),
 
             // Alt başlık
-            const Text(
+            Text(
               'Fırat Üniversitesi\'nden duyuruları takip edin',
-              style: TextStyle(color: Colors.white70, fontSize: 16),
+              style: const TextStyle(color: Colors.white70, fontSize: 16),
               textAlign: TextAlign.center,
             ),
 
