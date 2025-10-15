@@ -1,0 +1,30 @@
+{
+  "parameters": {
+    "latest_version": {
+      "defaultValue": {
+        "value": "1.1.2"
+      },
+      "description": "Latest app version for update notifications"
+    },
+    "min_supported_version": {
+      "defaultValue": {
+        "value": "1.0.0"
+      },
+      "description": "Minimum supported version for mandatory updates"
+    },
+    "download_url": {
+      "defaultValue": {
+        "value": "https://github.com/Conquerorr0/bilsin/releases/latest/download/app-release.apk"
+      },
+      "description": "Download URL for the latest APK"
+    }
+  },
+  "parameterGroups": {},
+  "version": {
+    "versionNumber": "1",
+    "updateTime": "2024-12-19T19:00:00.000Z",
+    "updateUser": {
+      "email": "conquerorr0@users.noreply.github.com"
+    }
+  }
+}

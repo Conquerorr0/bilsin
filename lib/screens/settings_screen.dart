@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../providers/user_provider.dart';
 import '../providers/theme_provider.dart';
 import '../providers/locale_provider.dart';
@@ -264,10 +265,16 @@ class SettingsScreen extends StatelessWidget {
   }
 
   Widget _buildVersionTile() {
-    return const ListTile(
-      leading: Icon(Icons.info_outline),
-      title: Text('Versiyon'),
-      subtitle: Text('1.0.0'),
+    return FutureBuilder<PackageInfo>(
+      future: PackageInfo.fromPlatform(),
+      builder: (context, snapshot) {
+        final version = snapshot.hasData ? snapshot.data!.version : '1.1.2';
+        return ListTile(
+          leading: const Icon(Icons.info_outline),
+          title: const Text('Versiyon'),
+          subtitle: Text(version),
+        );
+      },
     );
   }
 
@@ -314,10 +321,11 @@ class SettingsScreen extends StatelessWidget {
   }
 
   void _showAboutDialog(BuildContext context) {
-    showAboutDialog(
-      context: context,
-      applicationName: 'Fırat Üni Duyuru Takip',
-      applicationVersion: '1.0.0',
+    PackageInfo.fromPlatform().then((packageInfo) {
+      showAboutDialog(
+        context: context,
+        applicationName: 'Fırat Üni Duyuru Takip',
+        applicationVersion: packageInfo.version,
       applicationIcon: const Icon(
         Icons.school,
         size: 64,
@@ -343,5 +351,6 @@ class SettingsScreen extends StatelessWidget {
         ),
       ],
     );
+    });
   }
 }

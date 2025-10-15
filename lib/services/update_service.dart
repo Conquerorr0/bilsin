@@ -17,7 +17,7 @@ class UpdateService {
       minimumFetchInterval: const Duration(hours: 1),
     ));
     await rc.setDefaults(const {
-      keyLatestVersion: '1.1.0',
+      keyLatestVersion: '1.1.2',
       keyMinSupportedVersion: '1.0.0',
       keyDownloadUrl: 'https://github.com/Conquerorr0/bilsin/releases/latest/download/app-release.apk',
     });
