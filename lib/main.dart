@@ -41,63 +41,64 @@ class MyApp extends StatelessWidget {
       ],
       child: Builder(
         builder: (context) => Consumer2<ThemeProvider, LocaleProvider>(
-          builder: (context, themeProvider, localeProvider, child) => MaterialApp(
-            title: 'Fırat Üni Duyuru Takip',
-            navigatorKey: navigatorKey,
-            debugShowCheckedModeBanner: false,
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            locale: localeProvider.locale,
-          theme: ThemeData(
-            primarySwatch: Colors.red,
-            primaryColor: const Color(0xFF79113E),
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color(0xFF79113E),
-              brightness: Brightness.light,
-            ),
-            useMaterial3: true,
-            appBarTheme: const AppBarTheme(
-              backgroundColor: Color(0xFF79113E),
-              foregroundColor: Colors.white,
-              elevation: 0,
-            ),
-            elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF79113E),
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+          builder: (context, themeProvider, localeProvider, child) =>
+              MaterialApp(
+                title: 'Fırat Üni Duyuru Takip',
+                navigatorKey: navigatorKey,
+                debugShowCheckedModeBanner: false,
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+                locale: localeProvider.locale,
+                theme: ThemeData(
+                  primarySwatch: Colors.red,
+                  primaryColor: const Color(0xFF79113E),
+                  colorScheme: ColorScheme.fromSeed(
+                    seedColor: const Color(0xFF79113E),
+                    brightness: Brightness.light,
+                  ),
+                  useMaterial3: true,
+                  appBarTheme: const AppBarTheme(
+                    backgroundColor: Color(0xFF79113E),
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                  ),
+                  elevatedButtonTheme: ElevatedButtonThemeData(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF79113E),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                  cardTheme: CardThemeData(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
                 ),
+                darkTheme: ThemeData(
+                  colorScheme: ColorScheme.fromSeed(
+                    seedColor: const Color(0xFF79113E),
+                    brightness: Brightness.dark,
+                  ),
+                  useMaterial3: true,
+                  appBarTheme: const AppBarTheme(
+                    backgroundColor: Color(0xFF1E1E1E),
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                  ),
+                  cardTheme: CardThemeData(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+                themeMode: themeProvider.mode,
+                home: const SplashScreen(),
               ),
-            ),
-            cardTheme: CardThemeData(
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-          ),
-          darkTheme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color(0xFF79113E),
-              brightness: Brightness.dark,
-            ),
-            useMaterial3: true,
-            appBarTheme: const AppBarTheme(
-              backgroundColor: Color(0xFF1E1E1E),
-              foregroundColor: Colors.white,
-              elevation: 0,
-            ),
-            cardTheme: CardThemeData(
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-          ),
-          themeMode: themeProvider.mode,
-          home: const SplashScreen(),
-          ),
         ),
       ),
     );
@@ -144,7 +145,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    
+
     return Scaffold(
       backgroundColor: const Color(0xFF79113E),
       body: Center(
