@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
+import '../services/update_service.dart';
 
 class TermsOfServiceScreen extends StatelessWidget {
   const TermsOfServiceScreen({super.key});
@@ -7,9 +9,9 @@ class TermsOfServiceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Kullanım Şartları',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          AppLocalizations.of(context)!.termsOfService,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color(0xFF79113E),
         foregroundColor: Colors.white,
@@ -20,18 +22,20 @@ class TermsOfServiceScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Fırat Üniversitesi Duyuru Takip Uygulaması Kullanım Şartları',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)!.appTitle +
+                  ' ' +
+                  AppLocalizations.of(context)!.termsOfService,
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF79113E),
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Son Güncelleme: 12 Ekim 2025',
-              style: TextStyle(
+            Text(
+              '${AppLocalizations.of(context)!.lastUpdated}: ${UpdateService.getLastReleaseDateString()}',
+              style: const TextStyle(
                 fontSize: 14,
                 color: Colors.grey,
                 fontStyle: FontStyle.italic,
@@ -39,54 +43,41 @@ class TermsOfServiceScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             _buildSection(
-              '1. Hizmet Tanımı',
-              'Bu uygulama, Fırat Üniversitesi\'nin 24 farklı bölümünden '
-                  'duyuruları takip etmenizi ve anlık bildirimler almanızı sağlar.',
+              AppLocalizations.of(context)!.tosServiceTitle,
+              AppLocalizations.of(context)!.tosServiceContent,
             ),
             _buildSection(
-              '2. Kullanım Koşulları',
-              'Uygulamayı kullanarak aşağıdaki koşulları kabul etmiş sayılırsınız:\n\n'
-                  '• Uygulamayı yasal amaçlarla kullanacaksınız\n'
-                  '• Başkalarının haklarını ihlal etmeyeceksiniz\n'
-                  '• Uygulamayı zararlı amaçlarla kullanmayacaksınız',
+              AppLocalizations.of(context)!.tosTermsTitle,
+              AppLocalizations.of(context)!.tosTermsContent,
             ),
             _buildSection(
-              '3. Kullanıcı Sorumlulukları',
-              'Kullanıcılar şunlardan sorumludur:\n\n'
-                  '• Doğru bilgi sağlamak\n'
-                  '• Uygulama güvenliğini korumak\n'
-                  '• Telif haklarına saygı göstermek',
+              AppLocalizations.of(context)!.tosResponsibilitiesTitle,
+              AppLocalizations.of(context)!.tosResponsibilitiesContent,
             ),
             _buildSection(
-              '4. Hizmet Kesintileri',
-              'Uygulama kesintisiz hizmet vermeyi hedefler ancak '
-                  'teknik nedenlerle geçici kesintiler olabilir.',
+              AppLocalizations.of(context)!.tosDowntimeTitle,
+              AppLocalizations.of(context)!.tosDowntimeContent,
             ),
             _buildSection(
-              '5. İçerik Sorumluluğu',
-              'Duyuru içerikleri Fırat Üniversitesi\'ne aittir. '
-                  'Uygulama sadece bu içerikleri gösterir.',
+              AppLocalizations.of(context)!.tosContentLiabilityTitle,
+              AppLocalizations.of(context)!.tosContentLiabilityContent,
             ),
             _buildSection(
-              '6. Değişiklikler',
-              'Bu kullanım şartları önceden haber verilmeksizin '
-                  'değiştirilebilir. Güncel versiyonu uygulamada bulabilirsiniz.',
+              AppLocalizations.of(context)!.tosChangesTitle,
+              AppLocalizations.of(context)!.tosChangesContent,
             ),
             _buildSection(
-              '7. Sorumluluk Reddi',
-              'Uygulama "olduğu gibi" sağlanır. Fırat Üniversitesi, '
-                  'uygulamanın kesintisiz çalışmasını garanti etmez.',
+              AppLocalizations.of(context)!.tosDisclaimerTitle,
+              AppLocalizations.of(context)!.tosDisclaimerContent,
             ),
             _buildSection(
-              '8. İletişim',
-              'Kullanım şartları ile ilgili sorularınız için:\n\n'
-                  'E-posta: bilgi@firat.edu.tr\n'
-                  'Web: https://www.firat.edu.tr',
+              AppLocalizations.of(context)!.tosContactTitle,
+              AppLocalizations.of(context)!.tosContactContent,
             ),
             const SizedBox(height: 32),
-            const Text(
-              'Bu kullanım şartları, Fırat Üniversitesi tarafından hazırlanmıştır.',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)!.tosFooter,
+              style: const TextStyle(
                 fontSize: 12,
                 color: Colors.grey,
                 fontStyle: FontStyle.italic,

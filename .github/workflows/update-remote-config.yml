@@ -1,0 +1,84 @@
+name: Update Remote Config on Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-remote-config:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set release metadata
+        id: rel
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          # strip leading 'v' if present
+          VERSION="${TAG#v}"
+          DATE_ISO="${{ github.event.release.published_at }}"
+          # keep yyyy-mm-dd
+          DATE="${DATE_ISO%%T*}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "date=$DATE" >> $GITHUB_OUTPUT
+
+      - name: Auth to Google Cloud (Workload Identity or SA JSON)
+        uses: google-github-actions/auth@v2
+        with:
+          # Preferred: Workload Identity Federation
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}
+          # Fallback: Service Account JSON (if not using WIF)
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          token_format: access_token
+
+      - name: Install curl and jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Fetch current Remote Config template
+        id: fetch
+        env:
+          ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+        run: |
+          ACCESS_TOKEN=${{ steps.auth.outputs.access_token }}
+          RC_URL="https://firebaseremoteconfig.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/remoteConfig"
+          # Get template and capture ETag header
+          curl -sS -D headers.txt -H "Authorization: Bearer $ACCESS_TOKEN" "$RC_URL" -o template.json
+          E_TAG=$(grep -i ^etag: headers.txt | awk '{print $2}' | tr -d '\r')
+          if [ -z "$E_TAG" ]; then echo "Failed to fetch ETag" && exit 1; fi
+          echo "etag=$E_TAG" >> $GITHUB_OUTPUT
+
+      - name: Update template values
+        run: |
+          VERSION="${{ steps.rel.outputs.version }}"
+          DATE="${{ steps.rel.outputs.date }}"
+          # Ensure parameters exist then set simpleValue
+          jq \
+            --arg ver "$VERSION" \
+            --arg date "$DATE" \
+            '.parameters.latest_version.simpleValue = $ver | .parameters.last_release_date.simpleValue = $date' \
+            template.json > template.updated.json
+
+      - name: Publish Remote Config template
+        env:
+          ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+        run: |
+          RC_URL="https://firebaseremoteconfig.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/remoteConfig"
+          ETAG="${{ steps.fetch.outputs.etag }}"
+          curl -sS -X PUT "$RC_URL" \
+            -H "Authorization: Bearer $ACCESS_TOKEN" \
+            -H "If-Match: $ETAG" \
+            -H "Content-Type: application/json; UTF-8" \
+            --data-binary @template.updated.json \
+            -o /dev/null -w "%{http_code}\n"
+
+      - name: Done
+        run: echo "Remote Config updated to version ${{ steps.rel.outputs.version }} on date ${{ steps.rel.outputs.date }}"
+
+
