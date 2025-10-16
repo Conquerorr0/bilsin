@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../l10n/app_localizations.dart';
 import '../providers/user_provider.dart';
 import '../models/department.dart';
 import '../widgets/department_card.dart';
@@ -42,11 +43,12 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Bölümleri Seç',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          l10n.selectDepartments,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color(0xFF79113E),
         foregroundColor: Colors.white,
@@ -90,7 +92,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
         child: TextField(
           controller: _searchController,
           decoration: InputDecoration(
-            hintText: 'Bölüm ara...',
+            hintText: AppLocalizations.of(context)!.departmentSearch,
             prefixIcon: const Icon(Icons.search, color: Color(0xFF79113E)),
             border: InputBorder.none,
             contentPadding: const EdgeInsets.symmetric(
@@ -106,8 +108,8 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
   Widget _buildSelectionInfo() {
     return Consumer<UserProvider>(
       builder: (context, userProvider, child) {
+        final l10n = AppLocalizations.of(context)!;
         final selectedCount = userProvider.selectedDepartments.length;
-        final totalCount = Department.allDepartments.length;
 
         return Container(
           padding: const EdgeInsets.all(16),
@@ -118,8 +120,8 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
               Expanded(
                 child: Text(
                   selectedCount == 0
-                      ? 'Takip etmek istediğiniz bölümleri seçin'
-                      : '$selectedCount / $totalCount bölüm seçili',
+                      ? l10n.selectDepartmentsDescription
+                      : l10n.departmentsSelected(selectedCount),
                   style: TextStyle(
                     color: Colors.blue[800],
                     fontWeight: FontWeight.w500,
@@ -131,7 +133,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                   onPressed: () {
                     userProvider.updateSelectedDepartments([]);
                   },
-                  child: const Text('Tümünü Kaldır'),
+                  child: Text(l10n.removeAll),
                 ),
             ],
           ),
@@ -143,6 +145,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
   Widget _buildDepartmentList() {
     return Consumer<UserProvider>(
       builder: (context, userProvider, child) {
+        final l10n = AppLocalizations.of(context)!;
         if (userProvider.isLoading) {
           return const Center(
             child: CircularProgressIndicator(
@@ -152,15 +155,15 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
         }
 
         if (_filteredDepartments.isEmpty) {
-          return const Center(
+          return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.search_off, size: 64, color: Colors.grey),
-                SizedBox(height: 16),
+                const Icon(Icons.search_off, size: 64, color: Colors.grey),
+                const SizedBox(height: 16),
                 Text(
-                  'Arama kriterlerinize uygun bölüm bulunamadı',
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                  l10n.noDepartmentsFoundMessage,
+                  style: const TextStyle(fontSize: 16, color: Colors.grey),
                 ),
               ],
             ),
@@ -216,8 +219,8 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                   label: Text(
                     userProvider.selectedDepartments.length ==
                             Department.allDepartments.length
-                        ? 'Tümünü Kaldır'
-                        : 'Tümünü Seç',
+                        ? AppLocalizations.of(context)!.removeAll
+                        : AppLocalizations.of(context)!.selectAll,
                   ),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: const Color(0xFF79113E),
@@ -244,7 +247,11 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    '${userProvider.selectedDepartments.length} bölüm seçildi',
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.departmentsSelected(
+                                      userProvider.selectedDepartments.length,
+                                    ),
                                   ),
                                   backgroundColor: const Color(0xFF79113E),
                                 ),
@@ -255,7 +262,9 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                             if (mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Hata: $e'),
+                                  content: Text(
+                                    '${AppLocalizations.of(context)!.error}: $e',
+                                  ),
                                   backgroundColor: Colors.red,
                                 ),
                               );
@@ -263,7 +272,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                           }
                         },
                   icon: const Icon(Icons.save),
-                  label: const Text('Kaydet'),
+                  label: Text(AppLocalizations.of(context)!.saveButton),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF79113E),
                     foregroundColor: Colors.white,

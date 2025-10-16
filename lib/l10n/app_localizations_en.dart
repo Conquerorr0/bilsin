@@ -1,4 +1,8 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
 
 /// The translations for English (`en`).
 class AppLocalizationsEn extends AppLocalizations {
@@ -46,13 +50,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noAnnouncements => 'No announcements yet';
 
   @override
-  String get noAnnouncementsMessage => 'No announcements found in the departments you follow.';
+  String get noAnnouncementsMessage =>
+      'No announcements found in the departments you follow.';
 
   @override
   String get selectDepartmentsFirst => 'Select departments first';
 
   @override
-  String get selectDepartmentsMessage => 'You need to select at least one department to see announcements.';
+  String get selectDepartmentsMessage =>
+      'You need to select at least one department to see announcements.';
 
   @override
   String get announcementDetails => 'Announcement Details';
@@ -65,6 +71,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get publishedOn => 'Published On';
+
+  @override
+  String get addedOn => 'Added On';
 
   @override
   String get department => 'Department';
@@ -88,7 +97,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get testNotification => 'Test Notification';
 
   @override
-  String get testNotificationDescription => 'Use to test the notification system';
+  String get testNotificationDescription =>
+      'Use to test the notification system';
 
   @override
   String get sendTestNotification => 'Send Test Notification';
@@ -118,7 +128,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get version => 'Version';
 
   @override
-  String get developer => 'Developer';
+  String get developer =>
+      'Developer: Fırat University Digital Transformation and Software Office';
 
   @override
   String get developerInfo => 'Fatih Altuntaş - Fırat University Student';
@@ -160,16 +171,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tryAgain => 'Try again';
 
   @override
-  String ago(String time) => '$time ago';
+  String ago(String time) {
+    return '$time ago';
+  }
 
   @override
-  String daysAgo(int count) => '$count days ago';
+  String daysAgo(int count) {
+    return '$count days ago';
+  }
 
   @override
-  String hoursAgo(int count) => '$count hours ago';
+  String hoursAgo(int count) {
+    return '$count hours ago';
+  }
 
   @override
-  String minutesAgo(int count) => '$count minutes ago';
+  String minutesAgo(int count) {
+    return '$count minutes ago';
+  }
 
   @override
   String get justNow => 'Just now';
@@ -187,7 +206,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get followDepartments => 'Follow Departments';
 
   @override
-  String get followDepartmentsDescription => 'Select the departments you want to follow';
+  String get followDepartmentsDescription =>
+      'Select the departments you want to follow';
 
   @override
   String get notificationSettings => 'Notification Settings';
@@ -199,7 +219,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onlyNewAnnouncements => 'Only New Announcements';
 
   @override
-  String get notificationPreferenceDescription => 'Choose your notification preference';
+  String get notificationPreferenceDescription =>
+      'Choose your notification preference';
 
   @override
   String get departmentSearch => 'Search departments...';
@@ -214,10 +235,186 @@ class AppLocalizationsEn extends AppLocalizations {
   String get urlCannotBeOpened => 'URL cannot be opened';
 
   @override
+  String get copyUrl => 'Copy URL';
+
+  @override
+  String get urlCopied => 'URL copied to clipboard';
+
+  @override
   String get shareSubject => 'Fırat University Announcement';
 
   @override
   String shareText(String title, String content, String url, String date) {
     return '📢 $title\n\n$content\n\n🔗 $url\n\n📅 $date\n\n#FiratUniversity #Announcement';
   }
+
+  @override
+  String get appName => 'Bilsin';
+
+  @override
+  String get theme => 'Theme';
+
+  @override
+  String get system => 'System';
+
+  @override
+  String get dark => 'Dark';
+
+  @override
+  String get light => 'Light';
+
+  @override
+  String get testNotifications => 'Test Notifications';
+
+  @override
+  String get testNotificationsDescription =>
+      'Test if notifications are working';
+
+  @override
+  String get aboutDescription => 'Get information about the app';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get privacyPolicyDescription => 'Data usage and privacy';
+  @override
+  String get lastUpdated => 'Last Updated';
+
+  @override
+  String get termsOfService => 'Terms of Service';
+
+  @override
+  String get termsOfServiceDescription => 'Terms and conditions of service';
+
+  // Privacy Policy EN
+  @override
+  String get ppCollectedInfoTitle => '1. Information Collected';
+  @override
+  String get ppCollectedInfoContent =>
+      'We collect the following:\n\n• FCM token (to send push notifications)\n• Followed departments\n• Notification preferences\n• Anonymous ID via Firebase Authentication';
+  @override
+  String get ppUsageTitle => '2. How We Use Information';
+  @override
+  String get ppUsageContent =>
+      'Collected data is used to:\n\n• Deliver announcement notifications\n• Save your preferences\n• Improve the app experience';
+  @override
+  String get ppSharingTitle => '3. Sharing';
+  @override
+  String get ppSharingContent =>
+      'We do not share personal data with third parties. Only Firebase services (Firestore, FCM) are used.';
+  @override
+  String get ppSecurityTitle => '4. Security';
+  @override
+  String get ppSecurityContent =>
+      'All data is protected by Firebase security and stored securely.';
+  @override
+  String get ppDeletionTitle => '5. Data Deletion';
+  @override
+  String get ppDeletionContent =>
+      'You can delete your data by uninstalling the app. You may also request deletion via Firebase Console.';
+  @override
+  String get ppContactTitle => '6. Contact';
+  @override
+  String get ppContactContent =>
+      'For privacy questions:\n\nEmail: fatihaltuntas0@outlook.com';
+  @override
+  String get ppFooter => 'This privacy policy was prepared by Fatih Altuntaş.';
+
+  // Terms EN
+  @override
+  String get tosServiceTitle => '1. Service Description';
+  @override
+  String get tosServiceContent =>
+      'This app lets you follow announcements from 24 departments and receive instant notifications.';
+  @override
+  String get tosTermsTitle => '2. Terms of Use';
+  @override
+  String get tosTermsContent =>
+      'By using the app, you agree to:\n\n• Use the app for lawful purposes\n• Not infringe others’ rights\n• Not use the app for harmful activities';
+  @override
+  String get tosResponsibilitiesTitle => '3. User Responsibilities';
+  @override
+  String get tosResponsibilitiesContent =>
+      'Users are responsible for:\n\n• Providing accurate information\n• Protecting app security\n• Respecting copyrights';
+  @override
+  String get tosDowntimeTitle => '4. Service Downtime';
+  @override
+  String get tosDowntimeContent =>
+      'We aim for uninterrupted service but temporary outages may occur due to technical reasons.';
+  @override
+  String get tosContentLiabilityTitle => '5. Content Liability';
+  @override
+  String get tosContentLiabilityContent =>
+      'Announcement content belongs to Fırat University. The app only displays this content.';
+  @override
+  String get tosChangesTitle => '6. Changes';
+  @override
+  String get tosChangesContent =>
+      'These terms may change without notice. The latest version is available in the app.';
+  @override
+  String get tosDisclaimerTitle => '7. Disclaimer';
+  @override
+  String get tosDisclaimerContent =>
+      'The app is provided “as is”. We do not guarantee uninterrupted operation.';
+  @override
+  String get tosContactTitle => '8. Contact';
+  @override
+  String get tosContactContent =>
+      'For questions about the terms:\n\nEmail: fatihaltuntas0@outlook.com';
+  @override
+  String get tosFooter =>
+      'These terms of service were prepared by Fatih Altuntaş.';
+
+  @override
+  String get selectDepartmentsDescription =>
+      'Select the departments you want to follow';
+
+  @override
+  String get noDepartmentsFoundMessage =>
+      'No departments found matching your search criteria';
+
+  @override
+  String get saveButton => 'Save';
+
+  @override
+  String get total => 'Total';
+
+  @override
+  String get last24Hours => 'Last 24 Hours';
+
+  @override
+  String get noAnnouncementsFound => 'No announcements yet';
+
+  @override
+  String get selectDepartmentsFirstMessage =>
+      'Select the departments you want to follow';
+
+  @override
+  String get announcementNotFound => 'Announcement not found';
+
+  @override
+  String get departmentLabel => 'Department';
+
+  @override
+  String get contentLabel => 'Content';
+
+  @override
+  String get appDescription =>
+      'Mobile application that allows you to track announcements from all departments of Fırat University.';
+
+  @override
+  String get features => 'Features:';
+
+  @override
+  String get feature1 => '• Announcement tracking from 24 departments';
+
+  @override
+  String get feature2 => '• Instant push notifications';
+
+  @override
+  String get feature3 => '• Search and filtering';
+
+  @override
+  String get feature4 => '• Offline reading';
 }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import '../providers/user_provider.dart';
 import '../providers/theme_provider.dart';
 import '../providers/locale_provider.dart';
 import '../l10n/app_localizations.dart';
 import 'privacy_policy_screen.dart';
 import 'terms_of_service_screen.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -14,7 +14,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -32,10 +32,10 @@ class SettingsScreen extends StatelessWidget {
             children: [
               // Bildirim Ayarları
               _buildSection(
-                title: 'Bildirim Ayarları',
+                title: l10n.notificationSettings,
                 icon: Icons.notifications,
                 children: [
-                  _buildNotificationPreferenceTile(userProvider),
+                  _buildNotificationPreferenceTile(context, userProvider),
                   _buildTestNotificationTile(context, userProvider),
                 ],
               ),
@@ -44,7 +44,7 @@ class SettingsScreen extends StatelessWidget {
 
               // Takip Edilen Bölümler
               _buildSection(
-                title: 'Takip Edilen Bölümler',
+                title: l10n.followDepartments,
                 icon: Icons.school,
                 children: [
                   _buildFollowedDepartmentsTile(context, userProvider),
@@ -55,13 +55,13 @@ class SettingsScreen extends StatelessWidget {
 
               // Uygulama Bilgileri
               _buildSection(
-                title: 'Uygulama Bilgileri',
+                title: l10n.about,
                 icon: Icons.info,
                 children: [
                   _buildThemeTile(context),
                   _buildLanguageTile(context),
-                  _buildAppInfoTile(),
-                  _buildVersionTile(),
+                  _buildAppInfoTile(context),
+                  _buildVersionTile(context),
                 ],
               ),
 
@@ -69,7 +69,7 @@ class SettingsScreen extends StatelessWidget {
 
               // Hakkında
               _buildSection(
-                title: 'Hakkında',
+                title: l10n.about,
                 icon: Icons.help,
                 children: [
                   _buildAboutTile(context),
@@ -86,25 +86,26 @@ class SettingsScreen extends StatelessWidget {
 
   Widget _buildThemeTile(BuildContext context) {
     final themeProvider = context.watch<ThemeProvider>();
+    final l10n = AppLocalizations.of(context)!;
     return ListTile(
       leading: const Icon(Icons.dark_mode),
-      title: const Text('Tema'),
+      title: Text(l10n.theme),
       subtitle: Text(
         themeProvider.mode == ThemeMode.system
-            ? 'Sistem'
+            ? l10n.system
             : themeProvider.mode == ThemeMode.dark
-            ? 'Koyu'
-            : 'Açık',
+            ? l10n.dark
+            : l10n.light,
       ),
       trailing: DropdownButton<ThemeMode>(
         value: themeProvider.mode,
         onChanged: (ThemeMode? val) {
           if (val != null) themeProvider.setMode(val);
         },
-        items: const [
-          DropdownMenuItem(value: ThemeMode.system, child: Text('Sistem')),
-          DropdownMenuItem(value: ThemeMode.light, child: Text('Açık')),
-          DropdownMenuItem(value: ThemeMode.dark, child: Text('Koyu')),
+        items: [
+          DropdownMenuItem(value: ThemeMode.system, child: Text(l10n.system)),
+          DropdownMenuItem(value: ThemeMode.light, child: Text(l10n.light)),
+          DropdownMenuItem(value: ThemeMode.dark, child: Text(l10n.dark)),
         ],
       ),
     );
@@ -113,7 +114,7 @@ class SettingsScreen extends StatelessWidget {
   Widget _buildLanguageTile(BuildContext context) {
     final localeProvider = context.watch<LocaleProvider>();
     final l10n = AppLocalizations.of(context)!;
-    
+
     return ListTile(
       leading: const Icon(Icons.language),
       title: Text(l10n.language),
@@ -171,14 +172,18 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNotificationPreferenceTile(UserProvider userProvider) {
+  Widget _buildNotificationPreferenceTile(
+    BuildContext context,
+    UserProvider userProvider,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
     return ListTile(
       leading: const Icon(Icons.notifications_active),
-      title: const Text('Bildirim Tercihi'),
+      title: Text(l10n.notificationSettings),
       subtitle: Text(
         userProvider.notificationPreference == 'tumu'
-            ? 'Tüm duyurular için bildirim al'
-            : 'Sadece yeni duyurular için bildirim al',
+            ? l10n.allNotifications
+            : l10n.onlyNewAnnouncements,
       ),
       trailing: DropdownButton<String>(
         value: userProvider.notificationPreference,
@@ -187,11 +192,11 @@ class SettingsScreen extends StatelessWidget {
             userProvider.updateNotificationPreference(newValue);
           }
         },
-        items: const [
-          DropdownMenuItem(value: 'tumu', child: Text('Tüm Duyurular')),
+        items: [
+          DropdownMenuItem(value: 'tumu', child: Text(l10n.allNotifications)),
           DropdownMenuItem(
             value: 'sadece_yeni',
-            child: Text('Sadece Yeni Duyurular'),
+            child: Text(l10n.onlyNewAnnouncements),
           ),
         ],
       ),
@@ -202,10 +207,11 @@ class SettingsScreen extends StatelessWidget {
     BuildContext context,
     UserProvider userProvider,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     return ListTile(
       leading: const Icon(Icons.send),
-      title: const Text('Test Bildirimi Gönder'),
-      subtitle: const Text('Bildirimlerin çalıştığını test et'),
+      title: Text(l10n.testNotifications),
+      subtitle: Text(l10n.testNotificationsDescription),
       trailing: userProvider.isLoading
           ? const SizedBox(
               width: 20,
@@ -220,8 +226,8 @@ class SettingsScreen extends StatelessWidget {
                 await userProvider.sendTestNotification();
                 if (userProvider.error == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Test bildirimi gönderildi!'),
+                    SnackBar(
+                      content: Text(l10n.notificationSent),
                       backgroundColor: Colors.green,
                     ),
                   );
@@ -229,7 +235,7 @@ class SettingsScreen extends StatelessWidget {
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Hata: $e'),
+                    content: Text('${l10n.error}: $e'),
                     backgroundColor: Colors.red,
                   ),
                 );
@@ -242,10 +248,15 @@ class SettingsScreen extends StatelessWidget {
     BuildContext context,
     UserProvider userProvider,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     return ListTile(
       leading: const Icon(Icons.school),
-      title: const Text('Takip Edilen Bölümler'),
-      subtitle: Text('${userProvider.selectedDepartmentCount} bölüm seçili'),
+      title: Text(l10n.followDepartments),
+      subtitle: Text(
+        userProvider.selectedDepartmentCount > 0
+            ? l10n.departmentsSelected(userProvider.selectedDepartmentCount)
+            : l10n.selectDepartmentsDescription,
+      ),
       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
       onTap: () {
         Navigator.pop(context);
@@ -254,35 +265,36 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAppInfoTile() {
-    return const ListTile(
-      leading: Icon(Icons.school),
-      title: Text('Fırat Üniversitesi Duyuru Takip'),
-      subtitle: Text(
-        'Fırat Üniversitesi\'nin tüm bölümlerinden duyuruları takip edin',
-      ),
+  Widget _buildAppInfoTile(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return ListTile(
+      leading: const Icon(Icons.school),
+      title: Text(l10n.appTitle),
+      subtitle: Text(l10n.appDescription),
     );
   }
 
-  Widget _buildVersionTile() {
-    return FutureBuilder<PackageInfo>(
-      future: PackageInfo.fromPlatform(),
+  Widget _buildVersionTile(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return FutureBuilder<String>(
+      future: _getVersion(),
       builder: (context, snapshot) {
-        final version = snapshot.hasData ? snapshot.data!.version : '1.1.2';
+        final version = snapshot.data ?? '';
         return ListTile(
           leading: const Icon(Icons.info_outline),
-          title: const Text('Versiyon'),
-          subtitle: Text(version),
+          title: Text(l10n.version),
+          subtitle: Text(version.isEmpty ? '-' : version),
         );
       },
     );
   }
 
   Widget _buildAboutTile(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return ListTile(
       leading: const Icon(Icons.help_outline),
-      title: const Text('Hakkında'),
-      subtitle: const Text('Uygulama hakkında bilgi al'),
+      title: Text(l10n.about),
+      subtitle: Text(l10n.aboutDescription),
       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
       onTap: () {
         _showAboutDialog(context);
@@ -291,10 +303,11 @@ class SettingsScreen extends StatelessWidget {
   }
 
   Widget _buildPrivacyPolicyTile(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return ListTile(
       leading: const Icon(Icons.privacy_tip_outlined),
-      title: const Text('Gizlilik Politikası'),
-      subtitle: const Text('Veri kullanımı ve gizlilik'),
+      title: Text(l10n.privacyPolicy),
+      subtitle: Text(l10n.privacyPolicyDescription),
       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
       onTap: () {
         Navigator.push(
@@ -306,10 +319,11 @@ class SettingsScreen extends StatelessWidget {
   }
 
   Widget _buildTermsOfServiceTile(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return ListTile(
       leading: const Icon(Icons.description_outlined),
-      title: const Text('Kullanım Şartları'),
-      subtitle: const Text('Hizmet şartları ve koşulları'),
+      title: Text(l10n.termsOfService),
+      subtitle: Text(l10n.termsOfServiceDescription),
       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
       onTap: () {
         Navigator.push(
@@ -321,36 +335,42 @@ class SettingsScreen extends StatelessWidget {
   }
 
   void _showAboutDialog(BuildContext context) {
-    PackageInfo.fromPlatform().then((packageInfo) {
-      showAboutDialog(
-        context: context,
-        applicationName: 'Fırat Üni Duyuru Takip',
-        applicationVersion: packageInfo.version,
+    final l10n = AppLocalizations.of(context)!;
+    showAboutDialog(
+      context: context,
+      applicationName: l10n.appName,
+      applicationVersion: '',
       applicationIcon: const Icon(
         Icons.school,
         size: 64,
         color: Color(0xFF79113E),
       ),
       children: [
-        const Text(
-          'Fırat Üniversitesi\'nin tüm bölümlerinden duyuruları takip etmenizi sağlayan mobil uygulama.',
+        Text(l10n.appDescription),
+        const SizedBox(height: 16),
+        Text(
+          l10n.features,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
+        Text(l10n.feature1),
+        Text(l10n.feature2),
+        Text(l10n.feature3),
+        Text(l10n.feature4),
         const SizedBox(height: 16),
         const Text(
-          'Özellikler:',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        const Text('• 24 bölümden duyuru takibi'),
-        const Text('• Anlık push bildirimleri'),
-        const Text('• Arama ve filtreleme'),
-        const Text('• Offline okuma'),
-        const SizedBox(height: 16),
-        const Text(
-          'Geliştirici: Fırat Üniversitesi Dijital Dönüşüm ve Yazılım Ofisi',
+          'Developer: Fatih Altuntaş',
           style: TextStyle(fontStyle: FontStyle.italic),
         ),
       ],
     );
-    });
+  }
+
+  Future<String> _getVersion() async {
+    try {
+      final info = await PackageInfo.fromPlatform();
+      return info.version;
+    } catch (_) {
+      return '';
+    }
   }
 }
