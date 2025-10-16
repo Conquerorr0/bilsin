@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../l10n/app_localizations.dart';
 import '../providers/announcement_provider.dart';
 import '../providers/user_provider.dart';
 import '../widgets/announcement_card.dart';
@@ -73,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -99,17 +101,20 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const SizedBox(width: 8),
-            const Column(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Bilsin',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  l10n.appName,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
                 Text(
-                  'FÜ Duyuru Takip',
-                  style: TextStyle(fontSize: 12, color: Colors.white70),
+                  l10n.appTitle,
+                  style: const TextStyle(fontSize: 12, color: Colors.white70),
                 ),
               ],
             ),
@@ -149,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Image.asset('assets/images/app_icon.png', fit: BoxFit.cover),
           ),
         ),
-        label: const Text('Bölümler', style: TextStyle(color: Colors.white)),
+        label: Text(l10n.departments, style: TextStyle(color: Colors.white)),
       ),
     );
   }
@@ -157,6 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildInfoCard() {
     return Consumer2<UserProvider, AnnouncementProvider>(
       builder: (context, userProvider, announcementProvider, child) {
+        final l10n = AppLocalizations.of(context)!;
         // UserProvider değiştiğinde AnnouncementProvider'ı güncelle
         if (userProvider.isAuthenticated &&
             userProvider.selectedDepartments.isNotEmpty &&
@@ -219,20 +225,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  const Column(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Bilsin',
-                        style: TextStyle(
+                        l10n.appName,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        'FÜ Duyuru Platformu',
-                        style: TextStyle(color: Colors.white70, fontSize: 12),
+                        l10n.appTitle,
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 12,
+                        ),
                       ),
                     ],
                   ),
@@ -248,7 +257,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        '${userProvider.selectedDepartmentCount} bölüm takip ediliyor',
+                        l10n.departmentsSelected(
+                          userProvider.selectedDepartmentCount,
+                        ),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 12,
@@ -261,11 +272,11 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  _buildStatItem('Toplam', '${stats['total']}'),
+                  _buildStatItem(l10n.total, '${stats['total']}'),
                   const SizedBox(width: 16),
-                  _buildStatItem('Son 24 saat', '${stats['recent']}'),
+                  _buildStatItem(l10n.last24Hours, '${stats['recent']}'),
                   const SizedBox(width: 16),
-                  _buildStatItem('Bölümler', '${stats['departments']}'),
+                  _buildStatItem(l10n.departments, '${stats['departments']}'),
                 ],
               ),
             ],
@@ -306,7 +317,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onChanged: (query) {
               context.read<AnnouncementProvider>().updateSearchQuery(query);
             },
-            hintText: 'Duyurularda ara...',
+            hintText: AppLocalizations.of(context)!.searchHint,
           ),
 
           const SizedBox(height: 12),
@@ -327,6 +338,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildAnnouncementList() {
     return Consumer<AnnouncementProvider>(
       builder: (context, announcementProvider, child) {
+        final l10n = AppLocalizations.of(context)!;
         if (announcementProvider.isLoading) {
           return SkeletonList(
             itemCount: 5,
@@ -371,20 +383,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Colors.grey,
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'Henüz duyuru bulunmuyor',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                Text(
+                  l10n.noAnnouncementsFound,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'Takip etmek istediğiniz bölümleri seçin',
-                  style: TextStyle(color: Colors.grey),
+                Text(
+                  l10n.selectDepartmentsFirstMessage,
+                  style: const TextStyle(color: Colors.grey),
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton.icon(
                   onPressed: () => _navigateToDepartments(),
                   icon: const Icon(Icons.school),
-                  label: const Text('Bölümleri Seç'),
+                  label: Text(l10n.selectDepartments),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF79113E),
                     foregroundColor: Colors.white,
@@ -395,20 +410,29 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         }
 
-        return RefreshIndicator(
-          onRefresh: () async {
-            announcementProvider.refresh();
+        return NotificationListener<ScrollNotification>(
+          onNotification: (scroll) {
+            if (scroll.metrics.pixels >= scroll.metrics.maxScrollExtent - 200) {
+              // Yaklaşınca yükle
+              announcementProvider.loadMore();
+            }
+            return false;
           },
-          child: ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: announcements.length,
-            itemBuilder: (context, index) {
-              final announcement = announcements[index];
-              return AnnouncementCard(
-                announcement: announcement,
-                onTap: () => _navigateToDetail(announcement.id),
-              );
+          child: RefreshIndicator(
+            onRefresh: () async {
+              announcementProvider.refresh();
             },
+            child: ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: announcements.length,
+              itemBuilder: (context, index) {
+                final announcement = announcements[index];
+                return AnnouncementCard(
+                  announcement: announcement,
+                  onTap: () => _navigateToDetail(announcement.id),
+                );
+              },
+            ),
           ),
         );
       },

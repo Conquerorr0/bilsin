@@ -139,6 +139,64 @@ class FirebaseService {
     });
   }
 
+  // Sayfalı duyuru çekme
+  static Future<Map<String, dynamic>> getAnnouncementsPage(
+    List<String> departmentIds, {
+    required int limit,
+    required Map<String, DateTime?> cursors,
+  }) async {
+    try {
+      List<Announcement> all = [];
+      Map<String, DateTime?> newCursors = {};
+      bool hasMore = false;
+
+      for (final departmentId in departmentIds) {
+        final collectionName = 'bolum_${departmentId}_duyurular';
+        Query query = _firestore
+            .collection(collectionName)
+            .orderBy('olusturma_zamani', descending: true)
+            .limit(limit);
+
+        final last = cursors[departmentId];
+        if (last != null) {
+          query = query.startAfter([Timestamp.fromDate(last)]);
+        }
+
+        final snapshot = await query.get();
+        if (snapshot.docs.isNotEmpty) {
+          final items = snapshot.docs
+              .map(
+                (d) => Announcement.fromFirestore(
+                  d.data() as Map<String, dynamic>,
+                ),
+              )
+              .toList();
+          all.addAll(items);
+          final lastDoc = snapshot.docs.last;
+          final lastData = lastDoc.data() as Map<String, dynamic>;
+          final ts = lastData['olusturma_zamani'] as Timestamp?;
+          newCursors[departmentId] = ts?.toDate();
+          if (snapshot.docs.length == limit) {
+            hasMore = true;
+          }
+        } else {
+          newCursors[departmentId] = cursors[departmentId];
+        }
+      }
+
+      // Sırala
+      all.sort((a, b) {
+        final da = a.yayinlanmaTarihi ?? a.tarih;
+        final db = b.yayinlanmaTarihi ?? b.tarih;
+        return db.compareTo(da);
+      });
+
+      return {'announcements': all, 'cursors': newCursors, 'hasMore': hasMore};
+    } catch (e) {
+      throw Exception('Sayfalı duyuru alınamadı: $e');
+    }
+  }
+
   // FCM token'ı güncelle
   static Future<void> updateFCMToken(String token) async {
     try {

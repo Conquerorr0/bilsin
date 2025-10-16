@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/department.dart';
+import '../l10n/app_localizations.dart';
 
 class DepartmentCard extends StatelessWidget {
   final Department department;
@@ -61,7 +62,7 @@ class DepartmentCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      department.name,
+                      _localizedDepartmentName(context, department.name),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -72,7 +73,7 @@ class DepartmentCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      _getDepartmentType(department.name),
+                      _getDepartmentType(context, department.name),
                       style: TextStyle(
                         fontSize: 12,
                         color: isSelected
@@ -100,15 +101,63 @@ class DepartmentCard extends StatelessWidget {
     );
   }
 
-  String _getDepartmentType(String departmentName) {
-    if (departmentName.contains('Mühendislik Fakültesi')) {
-      return 'Fakülte';
-    } else if (departmentName.contains('Teknoloji Fakültesi')) {
-      return 'Teknoloji Fakültesi';
-    } else if (departmentName.contains('Uluslararası')) {
-      return 'Uluslararası Program';
+  String _getDepartmentType(BuildContext context, String departmentName) {
+    final l10n = AppLocalizations.of(context)!;
+    if (departmentName.contains('Mühendislik Fakültesi') ||
+        departmentName.contains('Faculty')) {
+      return l10n
+          .departments; // generic label; no specific key for type in l10n
+    } else if (departmentName.contains('Teknoloji Fakültesi') ||
+        departmentName.contains('Technology')) {
+      return l10n.departments;
+    } else if (departmentName.contains('Uluslararası') ||
+        departmentName.toLowerCase().contains('international')) {
+      return l10n.departments;
     } else {
-      return 'Bölüm';
+      return l10n.departmentLabel;
     }
+  }
+
+  String _localizedDepartmentName(BuildContext context, String trName) {
+    final locale = Localizations.localeOf(context).languageCode;
+    if (locale != 'en') return trName;
+    // Basit eşleme; gerekli görülenler eklenebilir
+    const Map<String, String> trToEn = {
+      'Mühendislik Fakültesi': 'Faculty of Engineering',
+      'Bilgisayar Mühendisliği': 'Computer Engineering',
+      'Biyomühendislik': 'Bioengineering',
+      'Çevre Mühendisliği': 'Environmental Engineering',
+      'Elektrik Elektronik Mühendisliği (Mühendislik Fakültesi)':
+          'Electrical and Electronics Engineering (Engineering Faculty)',
+      'İnşaat Mühendisliği': 'Civil Engineering',
+      'Jeoloji Mühendisliği': 'Geological Engineering',
+      'Kimya Mühendisliği': 'Chemical Engineering',
+      'Makine Mühendisliği': 'Mechanical Engineering',
+      'Mekatronik Mühendisliği': 'Mechatronics Engineering',
+      'Metalurji ve Malzeme Mühendisliği':
+          'Metallurgical and Materials Engineering',
+      'Yapay Zeka ve Veri Mühendisliği':
+          'Artificial Intelligence and Data Engineering',
+      'Yazılım Mühendisliği': 'Software Engineering',
+      'Teknoloji Fakültesi': 'Faculty of Technology',
+      'Adli Bilişim Mühendisliği': 'Forensic Informatics Engineering',
+      'Elektrik Elektronik Mühendisliği (Teknoloji Mühendislik)':
+          'Electrical and Electronics Engineering (Technology Faculty)',
+      'Enerji Sistemleri Mühendisliği': 'Energy Systems Engineering',
+      'İnşaat Mühendisliği (Teknoloji Fakültesi)':
+          'Civil Engineering (Technology Faculty)',
+      'Makine Mühendisliği (Teknoloji Fakültesi)':
+          'Mechanical Engineering (Technology Faculty)',
+      'Mekatronik Mühendisliği (Teknoloji Fakültesi)':
+          'Mechatronics Engineering (Technology Faculty)',
+      'Metalurji ve Malzeme Mühendisliği (Teknoloji Fakültesi)':
+          'Metallurgical and Materials Engineering (Technology Faculty)',
+      'Otomotiv Mühendisliği Bölümü': 'Automotive Engineering',
+      'Yazılım Mühendisliği (Teknoloji Fakültesi)':
+          'Software Engineering (Technology Faculty)',
+      'Yazılım Mühendisliği Uluslararası Ortak Lisans Programı':
+          'Software Engineering International Joint Undergraduate Program',
+    };
+    return trToEn[trName] ?? trName;
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
+import '../services/update_service.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
   const PrivacyPolicyScreen({super.key});
@@ -7,9 +9,9 @@ class PrivacyPolicyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Gizlilik Politikası',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          AppLocalizations.of(context)!.privacyPolicy,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color(0xFF79113E),
         foregroundColor: Colors.white,
@@ -20,18 +22,20 @@ class PrivacyPolicyScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Fırat Üniversitesi Duyuru Takip Uygulaması Gizlilik Politikası',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)!.appTitle +
+                  ' ' +
+                  AppLocalizations.of(context)!.privacyPolicy,
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF79113E),
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Son Güncelleme: 12 Ekim 2025',
-              style: TextStyle(
+            Text(
+              '${AppLocalizations.of(context)!.lastUpdated}: ${UpdateService.getLastReleaseDateString()}',
+              style: const TextStyle(
                 fontSize: 14,
                 color: Colors.grey,
                 fontStyle: FontStyle.italic,
@@ -39,45 +43,33 @@ class PrivacyPolicyScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             _buildSection(
-              '1. Toplanan Bilgiler',
-              'Uygulamamız aşağıdaki bilgileri toplar:\n\n'
-                  '• FCM Token: Push bildirimleri göndermek için\n'
-                  '• Takip Edilen Bölümler: Kullanıcının seçtiği bölümler\n'
-                  '• Bildirim Tercihleri: Kullanıcının bildirim ayarları\n'
-                  '• Anonim Kimlik: Firebase Authentication ile',
+              AppLocalizations.of(context)!.ppCollectedInfoTitle,
+              AppLocalizations.of(context)!.ppCollectedInfoContent,
             ),
             _buildSection(
-              '2. Bilgilerin Kullanımı',
-              'Toplanan bilgiler sadece aşağıdaki amaçlarla kullanılır:\n\n'
-                  '• Duyuru bildirimleri gönderme\n'
-                  '• Kullanıcı tercihlerini kaydetme\n'
-                  '• Uygulama deneyimini iyileştirme',
+              AppLocalizations.of(context)!.ppUsageTitle,
+              AppLocalizations.of(context)!.ppUsageContent,
             ),
             _buildSection(
-              '3. Bilgi Paylaşımı',
-              'Kişisel bilgileriniz üçüncü taraflarla paylaşılmaz. '
-                  'Sadece Firebase hizmetleri (Firestore, FCM) kullanılır.',
+              AppLocalizations.of(context)!.ppSharingTitle,
+              AppLocalizations.of(context)!.ppSharingContent,
             ),
             _buildSection(
-              '4. Veri Güvenliği',
-              'Tüm veriler Firebase güvenlik altyapısı ile korunur. '
-                  'Veriler şifrelenmiş olarak saklanır.',
+              AppLocalizations.of(context)!.ppSecurityTitle,
+              AppLocalizations.of(context)!.ppSecurityContent,
             ),
             _buildSection(
-              '5. Veri Silme',
-              'Uygulamayı silerek tüm verilerinizi kaldırabilirsiniz. '
-                  'Firebase Console üzerinden de verilerinizi silebilirsiniz.',
+              AppLocalizations.of(context)!.ppDeletionTitle,
+              AppLocalizations.of(context)!.ppDeletionContent,
             ),
             _buildSection(
-              '6. İletişim',
-              'Gizlilik politikası ile ilgili sorularınız için:\n\n'
-                  'E-posta: bilgi@firat.edu.tr\n'
-                  'Web: https://www.firat.edu.tr',
+              AppLocalizations.of(context)!.ppContactTitle,
+              AppLocalizations.of(context)!.ppContactContent,
             ),
             const SizedBox(height: 32),
-            const Text(
-              'Bu gizlilik politikası, Fırat Üniversitesi tarafından hazırlanmıştır.',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)!.ppFooter,
+              style: const TextStyle(
                 fontSize: 12,
                 color: Colors.grey,
                 fontStyle: FontStyle.italic,

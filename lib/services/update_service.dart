@@ -4,22 +4,29 @@ import 'package:flutter/material.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../l10n/app_localizations.dart';
 
 class UpdateService {
   static const String keyLatestVersion = 'latest_version';
   static const String keyMinSupportedVersion = 'min_supported_version';
   static const String keyDownloadUrl = 'download_url';
+  static const String keyLastReleaseDate =
+      'last_release_date'; // ISO 8601 (YYYY-MM-DD)
 
   static Future<void> ensureInitialized() async {
     final rc = FirebaseRemoteConfig.instance;
-    await rc.setConfigSettings(RemoteConfigSettings(
-      fetchTimeout: const Duration(seconds: 10),
-      minimumFetchInterval: const Duration(hours: 1),
-    ));
+    await rc.setConfigSettings(
+      RemoteConfigSettings(
+        fetchTimeout: const Duration(seconds: 10),
+        minimumFetchInterval: const Duration(hours: 1),
+      ),
+    );
     await rc.setDefaults(const {
-      keyLatestVersion: '1.1.0',
+      keyLatestVersion: '1.1.3',
       keyMinSupportedVersion: '1.0.0',
-      keyDownloadUrl: 'https://github.com/Conquerorr0/bilsin/releases/latest/download/app-release.apk',
+      keyDownloadUrl:
+          'https://github.com/Conquerorr0/bilsin/releases/latest/download/app-release.apk',
+      keyLastReleaseDate: '2025-10-16',
     });
     await rc.fetchAndActivate();
   }
@@ -54,6 +61,17 @@ class UpdateService {
     }
   }
 
+  static String getLastReleaseDateString() {
+    try {
+      final rc = FirebaseRemoteConfig.instance;
+      final date = rc.getString(keyLastReleaseDate);
+      if (date.isEmpty) return '';
+      return date; // keep as provided (ISO or display string)
+    } catch (_) {
+      return '';
+    }
+  }
+
   static bool _isVersionLower(String a, String b) {
     try {
       List<int> pa = a.split('.').map(int.parse).toList();
@@ -81,24 +99,38 @@ class UpdateService {
       context: context,
       barrierDismissible: !mandatory,
       builder: (ctx) {
+        final l10n = AppLocalizations.of(context)!;
         return AlertDialog(
-          title: const Text('Güncelleme Mevcut'),
+          title: Text(l10n.updateAvailable),
           content: Text(
             mandatory
-                ? 'Uygulamanız eski bir sürüm kullanıyor (v$current). Devam etmek için lütfen en az v$latest sürümüne güncelleyin.'
-                : 'Yeni bir sürüm mevcut (v$latest). Şu anki sürümünüz v$current. Güncellemek ister misiniz?',
+                ? '${l10n.updateRequired}: v$current → v$latest'
+                : '${l10n.updateOptional}: v$current → v$latest',
           ),
           actions: [
             if (!mandatory)
               TextButton(
                 onPressed: () => Navigator.of(ctx).pop(),
-                child: const Text('Daha Sonra'),
+                child: Text(l10n.updateLater),
               ),
             FilledButton(
               onPressed: () async {
                 final uri = Uri.parse(downloadUrl);
+                bool opened = false;
                 if (await canLaunchUrl(uri)) {
-                  await launchUrl(uri, mode: LaunchMode.externalApplication);
+                  opened = await launchUrl(
+                    uri,
+                    mode: LaunchMode.externalApplication,
+                  );
+                }
+                if (!opened) {
+                  opened = await launchUrl(
+                    uri,
+                    mode: LaunchMode.platformDefault,
+                  );
+                }
+                if (!opened) {
+                  opened = await launchUrl(uri, mode: LaunchMode.inAppWebView);
                 }
                 if (mandatory) {
                   // Zorunlu güncellemede kullanıcıyı uygulamadan çıkar
@@ -110,7 +142,7 @@ class UpdateService {
                   Navigator.of(ctx).pop();
                 }
               },
-              child: const Text('Güncelle'),
+              child: Text(l10n.updateNow),
             ),
           ],
         );
@@ -118,5 +150,3 @@ class UpdateService {
     );
   }
 }
-
-

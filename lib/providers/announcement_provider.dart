@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/announcement.dart';
 import '../models/department.dart';
 import '../services/firebase_service.dart';
@@ -12,6 +13,12 @@ class AnnouncementProvider with ChangeNotifier {
   String _searchQuery = '';
   String? _selectedDepartmentFilter;
   List<String> _followedDepartments = [];
+  // Pagination state
+  final int _pageSize = 20;
+  bool _isLoadingMore = false;
+  bool _hasMore = true;
+  Map<String, DateTime?> _deptCursors = {};
+  static const String _prefsKeyFilter = 'selected_department_filter';
 
   // Getters
   List<Announcement> get announcements => _filteredAnnouncements;
@@ -32,6 +39,7 @@ class AnnouncementProvider with ChangeNotifier {
     // Başlangıçta boş liste
     _announcements = [];
     _applyFilters();
+    _loadPersistedFilter();
   }
 
   // Takip edilen bölümleri güncelle
@@ -44,13 +52,9 @@ class AnnouncementProvider with ChangeNotifier {
     );
     _followedDepartments = departmentIds;
     if (departmentIds.isNotEmpty) {
-      if (isNewInstall) {
-        print('DEBUG: Loading recent announcements for new install');
-        loadRecentAnnouncements(departmentIds);
-      } else {
-        print('DEBUG: Loading followed announcements');
-        loadFollowedAnnouncements(departmentIds);
-      }
+      // Pagination tabanlı ilk yükleme
+      print('DEBUG: Loading initial paged announcements');
+      loadInitialAnnouncements(departmentIds);
     } else {
       print('DEBUG: No departments selected, showing empty list');
       // Hiç bölüm seçili değilse boş liste göster
@@ -90,28 +94,68 @@ class AnnouncementProvider with ChangeNotifier {
     List<String> departmentIds, {
     bool isNewInstall = false,
   }) {
-    print('DEBUG: loadFollowedAnnouncements called with: $departmentIds');
+    // Artık stream yerine sayfalı yükleme kullanıyoruz
+    print(
+      'DEBUG: loadFollowedAnnouncements -> redirect to loadInitialAnnouncements',
+    );
+    loadInitialAnnouncements(departmentIds);
+  }
+
+  // Paged loading - initial
+  Future<void> loadInitialAnnouncements(List<String> departmentIds) async {
     _isLoading = true;
     _error = null;
+    _deptCursors = {for (final id in departmentIds) id: null};
+    _hasMore = true;
+    _announcements = [];
     notifyListeners();
 
-    FirebaseService.getAnnouncementsStream(departmentIds).listen(
-      (announcements) {
-        print(
-          'DEBUG: Received ${announcements.length} announcements from stream',
-        );
-        _announcements = announcements;
-        _applyFilters();
-        _isLoading = false;
-        notifyListeners();
-      },
-      onError: (error) {
-        print('DEBUG: Error in stream: $error');
-        _error = error.toString();
-        _isLoading = false;
-        notifyListeners();
-      },
-    );
+    try {
+      final page = await FirebaseService.getAnnouncementsPage(
+        departmentIds,
+        limit: _pageSize,
+        cursors: _deptCursors,
+      );
+      _deptCursors = page['cursors'] as Map<String, DateTime?>;
+      final items = page['announcements'] as List<Announcement>;
+      _hasMore = page['hasMore'] as bool;
+      _announcements = items;
+      _applyFilters();
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // Paged loading - load more
+  Future<void> loadMore() async {
+    if (_isLoadingMore || !_hasMore || _followedDepartments.isEmpty) return;
+    _isLoadingMore = true;
+    notifyListeners();
+    try {
+      final page = await FirebaseService.getAnnouncementsPage(
+        _followedDepartments,
+        limit: _pageSize,
+        cursors: _deptCursors,
+      );
+      _deptCursors = page['cursors'] as Map<String, DateTime?>;
+      final items = page['announcements'] as List<Announcement>;
+      _hasMore = page['hasMore'] as bool;
+      // Append with dedupe
+      final map = {for (final a in _announcements) a.id: a};
+      for (final a in items) {
+        map[a.id] = a;
+      }
+      _announcements = map.values.toList();
+      _applyFilters();
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _isLoadingMore = false;
+      notifyListeners();
+    }
   }
 
   // Arama sorgusu güncelle
@@ -126,6 +170,7 @@ class AnnouncementProvider with ChangeNotifier {
     _selectedDepartmentFilter = departmentId;
     _applyFilters();
     notifyListeners();
+    _persistSelectedFilter();
   }
 
   // Filtreleri uygula
@@ -161,6 +206,27 @@ class AnnouncementProvider with ChangeNotifier {
       final dateB = b.yayinlanmaTarihi ?? b.tarih;
       return dateB.compareTo(dateA);
     });
+  }
+
+  Future<void> _loadPersistedFilter() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final saved = prefs.getString(_prefsKeyFilter);
+      if (saved != null && saved.isNotEmpty) {
+        _selectedDepartmentFilter = saved;
+      }
+    } catch (_) {}
+  }
+
+  Future<void> _persistSelectedFilter() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (_selectedDepartmentFilter == null) {
+        await prefs.remove(_prefsKeyFilter);
+      } else {
+        await prefs.setString(_prefsKeyFilter, _selectedDepartmentFilter!);
+      }
+    } catch (_) {}
   }
 
   // Duyuru detayını getir
@@ -244,7 +310,7 @@ class AnnouncementProvider with ChangeNotifier {
   Map<String, dynamic> getStatistics() {
     final total = _announcements.length;
     final recent = getRecentAnnouncements().length;
-    final departments = _announcements.map((a) => a.bolumId).toSet().length;
+    final departments = _followedDepartments.toSet().length;
     final topDepartments = getTopDepartments(limit: 3);
 
     return {

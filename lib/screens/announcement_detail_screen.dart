@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
+import '../l10n/app_localizations.dart';
 import '../providers/announcement_provider.dart';
 import '../models/announcement.dart';
 
@@ -13,11 +14,12 @@ class AnnouncementDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Duyuru Detayı',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          l10n.announcementDetails,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color(0xFF79113E),
         foregroundColor: Colors.white,
@@ -36,13 +38,16 @@ class AnnouncementDetailScreen extends StatelessWidget {
           );
 
           if (announcement == null) {
-            return const Center(
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.error_outline, size: 64, color: Colors.red),
-                  SizedBox(height: 16),
-                  Text('Duyuru bulunamadı', style: TextStyle(fontSize: 18)),
+                  const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                  const SizedBox(height: 16),
+                  Text(
+                    l10n.announcementNotFound,
+                    style: const TextStyle(fontSize: 18),
+                  ),
                 ],
               ),
             );
@@ -66,17 +71,17 @@ class AnnouncementDetailScreen extends StatelessWidget {
           const SizedBox(height: 16),
 
           // Bölüm bilgisi
-          _buildDepartmentCard(announcement),
+          _buildDepartmentCard(context, announcement),
 
           const SizedBox(height: 16),
 
           // İçerik kartı
-          _buildContentCard(announcement),
+          _buildContentCard(context, announcement),
 
           const SizedBox(height: 16),
 
           // Tarih bilgisi
-          _buildDateCard(announcement),
+          _buildDateCard(context, announcement),
 
           const SizedBox(height: 16),
 
@@ -122,7 +127,8 @@ class AnnouncementDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDepartmentCard(Announcement announcement) {
+  Widget _buildDepartmentCard(BuildContext context, Announcement announcement) {
+    final l10n = AppLocalizations.of(context)!;
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -136,9 +142,9 @@ class AnnouncementDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Bölüm',
-                    style: TextStyle(
+                  Text(
+                    l10n.departmentLabel,
+                    style: const TextStyle(
                       fontSize: 12,
                       color: Colors.grey,
                       fontWeight: FontWeight.w500,
@@ -160,7 +166,8 @@ class AnnouncementDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildContentCard(Announcement announcement) {
+  Widget _buildContentCard(BuildContext context, Announcement announcement) {
+    final l10n = AppLocalizations.of(context)!;
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -169,13 +176,13 @@ class AnnouncementDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Row(
+            Row(
               children: [
-                Icon(Icons.description, color: Color(0xFF79113E)),
-                SizedBox(width: 12),
+                const Icon(Icons.description, color: Color(0xFF79113E)),
+                const SizedBox(width: 12),
                 Text(
-                  'İçerik',
-                  style: TextStyle(
+                  l10n.contentLabel,
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF79113E),
@@ -198,7 +205,8 @@ class AnnouncementDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDateCard(Announcement announcement) {
+  Widget _buildDateCard(BuildContext context, Announcement announcement) {
+    final l10n = AppLocalizations.of(context)!;
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -212,9 +220,9 @@ class AnnouncementDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Yayın Tarihi',
-                    style: TextStyle(
+                  Text(
+                    l10n.publishedOn,
+                    style: const TextStyle(
                       fontSize: 12,
                       color: Colors.grey,
                       fontWeight: FontWeight.w500,
@@ -235,9 +243,9 @@ class AnnouncementDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Eklenme Tarihi',
-                    style: TextStyle(
+                  Text(
+                    l10n.addedOn,
+                    style: const TextStyle(
                       fontSize: 12,
                       color: Colors.grey,
                       fontWeight: FontWeight.w500,
@@ -267,7 +275,7 @@ class AnnouncementDetailScreen extends StatelessWidget {
           child: ElevatedButton.icon(
             onPressed: () => _openUrl(context, announcement.url),
             icon: const Icon(Icons.open_in_browser),
-            label: const Text('Web Sitesinde Aç'),
+            label: Text(AppLocalizations.of(context)!.openInWebsite),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF79113E),
               foregroundColor: Colors.white,
@@ -283,7 +291,7 @@ class AnnouncementDetailScreen extends StatelessWidget {
           child: OutlinedButton.icon(
             onPressed: () => _copyUrl(context, announcement.url),
             icon: const Icon(Icons.copy),
-            label: const Text('URL Kopyala'),
+            label: Text(AppLocalizations.of(context)!.copyUrl),
             style: OutlinedButton.styleFrom(
               foregroundColor: const Color(0xFF79113E),
               side: const BorderSide(color: Color(0xFF79113E)),
@@ -329,7 +337,9 @@ class AnnouncementDetailScreen extends StatelessWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('URL açılamadı: ${e.toString()}'),
+            content: Text(
+              '${AppLocalizations.of(context)!.urlCannotBeOpened}: ${e.toString()}',
+            ),
             backgroundColor: Colors.red,
           ),
         );
@@ -340,9 +350,9 @@ class AnnouncementDetailScreen extends StatelessWidget {
   void _copyUrl(BuildContext context, String url) {
     Clipboard.setData(ClipboardData(text: url));
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('URL panoya kopyalandı'),
-        duration: Duration(seconds: 2),
+      SnackBar(
+        content: Text(AppLocalizations.of(context)!.urlCopied),
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -353,20 +363,18 @@ class AnnouncementDetailScreen extends StatelessWidget {
         .getAnnouncementById(announcementId);
 
     if (announcement != null) {
-      final shareText =
-          '''
-📢 ${announcement.baslik}
+      final l10n = AppLocalizations.of(context)!;
+      final content = announcement.icerik.length > 200
+          ? '${announcement.icerik.substring(0, 200)}...'
+          : announcement.icerik;
+      final shareText = l10n.shareText(
+        announcement.baslik,
+        content,
+        announcement.url,
+        announcement.formattedDate,
+      );
 
-${announcement.icerik.length > 200 ? '${announcement.icerik.substring(0, 200)}...' : announcement.icerik}
-
-🔗 ${announcement.url}
-
-📅 ${announcement.formattedDate}
-
-#FıratÜniversitesi #Duyuru
-''';
-
-      Share.share(shareText, subject: announcement.baslik);
+      Share.share(shareText, subject: l10n.shareSubject);
     }
   }
 }
