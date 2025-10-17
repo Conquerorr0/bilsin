@@ -43,7 +43,7 @@ Uygulama; Mühendislik ve Teknoloji Fakültelerindeki 24 mühendislik bölümün
 
 ---
 
-## 🆕 Son Sürüm Notları (v1.1.1)
+## 🆕 Son Sürüm Notları (v1.1.4)
 
 - Dark Mode desteği eklendi (Açık/Koyu/Sistem)
 - Ayarlardan kalıcı tema seçimi (shared_preferences)
