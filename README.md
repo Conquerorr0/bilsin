@@ -10,7 +10,7 @@
   
 </div>
 
-[![Version](https://img.shields.io/badge/version-1.1.1-blue.svg)](https://github.com/Conquerorr0/bilsin/releases/tag/v1.1.1)
+[![Version](https://img.shields.io/badge/version-1.1.4-blue.svg)](https://github.com/Conquerorr0/bilsin/releases/tag/v1.1.4)
 [![Flutter](https://img.shields.io/badge/Flutter-3.8.1%2B-blue.svg)](https://flutter.dev/)
 [![Firebase](https://img.shields.io/badge/Firebase-%E2%9C%93-orange.svg)](https://firebase.google.com/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
